@@ -14,19 +14,19 @@ import sys
 import tokenize
 from io import BytesIO
 
-#import clang
+import clang
 import preprocessing.src.javalang_tokenizer as javalang_tok
-#from clang.cindex import TokenKind
+from clang.cindex import TokenKind
 from preprocessing.src.timeout import timeout, TimeoutError
 from sacrebleu import tokenize_v14_international
 
 TOK_NO_SPACE_BEFORE = {',', ';'}
-#clang.cindex.Config.set_library_path('/usr/local/opt/llvm/lib')
-#STRINGS_AND_COMMENTS_TOKEN_KINDS = {TokenKind.LITERAL, TokenKind.COMMENT}
+clang.cindex.Config.set_library_path('/usr/local/opt/llvm/lib')
+STRINGS_AND_COMMENTS_TOKEN_KINDS = {TokenKind.LITERAL, TokenKind.COMMENT}
 logging.basicConfig(
     filename='timeout_cpp_tokenizer_examples.log', level=logging.DEBUG)
 
-#idx = clang.cindex.Index.create()
+idx = clang.cindex.Index.create()
 
 JAVA_TOKEN2CHAR = {'STOKEN0': "//",
                    'STOKEN1': "/*",
@@ -317,20 +317,20 @@ def get_function_name_python(s):
     return s[s.index('def') + 1]
 
 
-#@timeout(10)
-#def get_cpp_tokens_and_types(s):
-#    tokens = []
-#    assert isinstance(s, str)
-#    s = s.replace(r'\r', '')
-#    hash = str(random.getrandbits(128))
-#    parsed_code = idx.parse(
-#        hash + '_tmp.cpp', args=['-std=c++11'], unsaved_files=[(hash + '_tmp.cpp', s)], options=0)
-#    for tok in parsed_code.get_tokens(extent=parsed_code.cursor.extent):
-#        tokens.append((tok.spelling, tok.kind))
-#    return tokens
+@timeout(10)
+def get_cpp_tokens_and_types(s):
+    tokens = []
+    assert isinstance(s, str)
+    s = s.replace(r'\r', '')
+    hash = str(random.getrandbits(128))
+    parsed_code = idx.parse(
+        hash + '_tmp.cpp', args=['-std=c++11'], unsaved_files=[(hash + '_tmp.cpp', s)], options=0)
+    for tok in parsed_code.get_tokens(extent=parsed_code.cursor.extent):
+        tokens.append((tok.spelling, tok.kind))
+    return tokens
 
 
-""" def tokenize_cpp(s, keep_comments=False):
+def tokenize_cpp(s, keep_comments=False):
     tokens = []
     assert isinstance(s, str)
     try:
@@ -358,7 +358,7 @@ def get_function_name_python(s):
         logging.info(f'TimeOut Error for string {s}')
         return []
     except:
-        return [] """
+        return []
 
 
 def tokenize_java(s, keep_comments=False):
@@ -384,7 +384,7 @@ def tokenize_java(s, keep_comments=False):
         return []
 
 
-""" def detokenize_cpp(s):
+def detokenize_cpp(s):
     assert isinstance(s, str) or isinstance(s, list)
     if isinstance(s, list):
         s = ' '.join(s)
@@ -436,7 +436,7 @@ def tokenize_java(s, keep_comments=False):
     untok_s = indent_lines(lines)
     untok_s = untok_s.replace('CB_COLON', '};').replace(
         'CB_COMA', '},').replace('CB_', '}').replace('OB_', '{')
-    return untok_s """
+    return untok_s
 
 
 def indent_lines(lines):
@@ -588,7 +588,7 @@ def extract_functions_java_with_docstring(function):
         return '', ''
 
 
-""" def clean_hashtags_functions_cpp(function):
+def clean_hashtags_functions_cpp(function):
     function = re.sub('[#][ ][i][n][c][l][u][d][e][ ]["].*?["]', "", function)
     function = re.sub('[#][ ][i][n][c][l][u][d][e][ ][<].*?[>]', "", function)
     function = re.sub('[#][ ][i][f][n][d][e][f][ ][^ ]*', "", function)
@@ -608,10 +608,10 @@ def extract_functions_java_with_docstring(function):
     function = function.replace('# else', '')
     function = function.replace('# endif', '')
     function = function.strip()
-    return function """
+    return function
 
 
-""" def extract_functions_cpp(s):
+def extract_functions_cpp(s):
     try:
         s = clean_hashtags_functions_cpp(s)
         s = s.replace('ENDCOM', '\n').replace('▁', 'SPACETOKEN')
@@ -716,7 +716,7 @@ def extract_functions_cpp_with_docstring(function):
         else:
             return re.sub('\s+', ' ', function), coms
     else:
-        return '', '' """
+        return '', ''
 
 
 def remove_java_annotation(function):
