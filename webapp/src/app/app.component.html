@@ -1,0 +1,98 @@
+<div style="box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12), 0 2px 4px -1px rgba(0,0,0,0.2);">
+  <mat-toolbar color="primary">
+    <button mat-icon-button>
+      <mat-icon>multiple_stop</mat-icon>
+    </button>
+    <h2>Code NMT</h2>
+  </mat-toolbar>
+</div>
+<div style="padding: 10px;">
+  <mat-card>
+    <div class="row" style="margin: 0px;">
+      <div class="col-lg-6 col-md-6 col-sm-6">
+        <mat-card style="background-color: #e8eaed;width: 40%;padding: 8px;float: right;">
+          <div style="color: #1a73e8;font-weight: 500;font-size: .875rem;height: 30px;">
+            <span style="line-height: 30px;margin: 0px;">From</span>
+            <button mat-icon-button [matMenuTriggerFor]="menuFrom" style="float: right;">
+              <mat-icon>keyboard_arrow_down</mat-icon>
+            </button>
+            <mat-menu #menuFrom="matMenu">
+              <button mat-menu-item>
+                <mat-icon style="color: #2e7534;">check_circle</mat-icon>
+                <!-- <img src="../assets/java-brands.svg" style="height: 20px;" alt="Java"> -->
+                <span style="line-height: 20px;bottom: 0;vertical-align: middle;"> Java</span>
+              </button>
+              <button mat-menu-item disabled>
+                <mat-icon>highlight_off</mat-icon>
+                <span>VB</span>
+              </button>
+            </mat-menu>
+          </div>  
+          <div style="height: 25px;">
+            <img src="../assets/java-brands.svg" style="height: 25px;" alt="Java">
+            <span class="h5" style="line-height: 25px;bottom: 0;vertical-align: bottom;margin-bottom: 0;"> Java</span>
+          </div>
+        </mat-card>
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-6">
+        <mat-card style="background-color: #e8eaed;width: 40%;padding: 8px;">
+          <div style="color: #1a73e8;font-weight: 500;font-size: .875rem;height: 30px;">
+            <span style="line-height: 30px;margin: 0px;">To</span>
+            <button mat-icon-button [matMenuTriggerFor]="menuTo" style="float: right;">
+              <mat-icon>keyboard_arrow_down</mat-icon>
+            </button>
+            <mat-menu #menuTo="matMenu">
+              <button mat-menu-item>
+                <mat-icon style="color: #2e7534;">check_circle</mat-icon>
+                <span>Python</span>
+              </button>
+              <button mat-menu-item disabled>
+                <mat-icon>highlight_off</mat-icon>
+                <span>C#</span>
+              </button>
+            </mat-menu>
+          </div>
+          <div>
+            <img src="../assets/python-brands.svg" style="height: 25px;" alt="Python">
+            <span class="h5"> Python</span>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+    <div style="height: 10px;"></div>
+    <div class="row">
+      <div class="col-lg-12" style="display: flex; align-items: center; justify-content: center;">
+        <button mat-raised-button color="primary" style="margin-left: 10px;">Generate</button>
+      </div>
+    </div>
+  </mat-card>
+  <div style="height: 10px;"></div>
+  <mat-card>
+    <div class="row">
+      <div class="col-lg-6">
+        <div style="height: 47px;">
+          <span class="h4" style="color: #103f7c; line-height: 47px;">Input (Java)</span>
+          <button mat-icon-button color="basic" #tooltip="matTooltip" matTooltip="Upload a file" matTooltipHideDelay="100000"> <!-- style="float: right;" mat-mini-fab -->
+            <mat-icon style="color: #255899;">publish</mat-icon>
+          </button>
+        </div>
+        <form>
+          <div class="form-group">
+            <textarea class="form-control" rows="24"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="col-lg-6">
+        <div style="height: 47px;">
+          <span class="h4" style="color: #103f7c; line-height: 47px;">Output (Python)</span>
+        </div>
+        <div style="border: 1px solid #ced4da; border-radius: .25rem;min-height: 590px;">
+          <mat-tab-group mat-align-tabs="start">
+            <mat-tab label="Code"></mat-tab>
+            <mat-tab label="AST"></mat-tab>
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+  </mat-card>    
+</div>
