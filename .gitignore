@@ -129,7 +129,7 @@ dmypy.json
 .pyre/
 
 
-nct_model/model/*.pth
+nct_model_estimator/nct_model/model/*.pth
 .DS_Store
 
 webapp/package-lock.json
