@@ -39,6 +39,7 @@
     "@angular/cli": "~11.0.4",
     "@angular/compiler-cli": "~11.0.4",
     "@fortawesome/fontawesome-free": "^5.15.1",
+    "@jefiozie/ngx-aws-deploy": "^3.0.0",
     "@types/jasmine": "~3.6.0",
     "@types/node": "^12.11.1",
     "codelyzer": "^6.0.0",
