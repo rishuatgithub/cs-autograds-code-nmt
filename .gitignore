@@ -129,5 +129,8 @@ dmypy.json
 .pyre/
 
 
-model/*.pth
+nct_model/model/*.pth
 .DS_Store
+
+webapp/package-lock.json
+webapp/package.json

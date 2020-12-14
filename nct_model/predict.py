@@ -112,7 +112,7 @@ if __name__=='__main__':
 
     translator = NMTranslator(params)
 
-    input = ""
+    input = sys.argv[1]
 
     with torch.no_grad():
         output = translator.predict_fn(input, lang1="java", lang2="python", n=1, beam_size=1)
