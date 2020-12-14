@@ -4,6 +4,10 @@
       <mat-icon>multiple_stop</mat-icon>
     </button>
     <h2>Code NMT</h2>
+    <span style="flex: 1 1 auto;"></span>
+    <button mat-icon-button>
+      <mat-icon>info</mat-icon>
+    </button>
   </mat-toolbar>
 </div>
 <div style="padding: 10px;">
@@ -62,7 +66,7 @@
     <div style="height: 10px;"></div>
     <div class="row">
       <div class="col-lg-12" style="display: flex; align-items: center; justify-content: center;">
-        <button mat-raised-button color="primary" style="margin-left: 10px;">Generate</button>
+        <button mat-raised-button color="primary" style="margin-left: 10px;" (click)="generateCode()">Generate</button>
       </div>
     </div>
   </mat-card>
@@ -78,7 +82,7 @@
         </div>
         <form>
           <div class="form-group">
-            <textarea class="form-control" rows="24"></textarea>
+            <textarea class="form-control" rows="29"></textarea>
           </div>
         </form>
       </div>
@@ -88,7 +92,11 @@
         </div>
         <div style="border: 1px solid #ced4da; border-radius: .25rem;min-height: 590px;">
           <mat-tab-group mat-align-tabs="start">
-            <mat-tab label="Code"></mat-tab>
+            <mat-tab label="Code">
+              <pre>
+                <code [highlight]="code" [lineNumbers]="lines" [languages]="languages" ></code>
+              </pre>
+            </mat-tab>
             <mat-tab label="AST"></mat-tab>
           </mat-tab-group>
         </div>

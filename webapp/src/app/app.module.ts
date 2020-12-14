@@ -13,8 +13,12 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatTooltipModule } from "@angular/material/tooltip";
 
+import { HighlightModule, HIGHLIGHT_OPTIONS, HighlightOptions } from "ngx-highlightjs";
+
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+
+
 
 @NgModule({
   imports: [
@@ -30,13 +34,20 @@ import { AppRoutingModule } from './app-routing.module';
     MatTabsModule,
     MatMenuModule,
     MatTooltipModule,
+    HighlightModule,
     AppRoutingModule
   ],
   declarations: [
     AppComponent
   ],
   providers: [
-
+    {
+      provide: HIGHLIGHT_OPTIONS,
+      useValue: <HighlightOptions>{
+        fullLibraryLoader: () => import('highlight.js'),
+        lineNumbers: true
+      }
+    }
   ],
   bootstrap: [AppComponent]
 })
