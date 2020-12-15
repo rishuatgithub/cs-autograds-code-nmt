@@ -1,17 +1,14 @@
 #!/bin/bash
 
 IMAGE_NAME="nct-model-ecr"
+ACCOUNT="639961517570"
+REGION="us-east-1"
 
-chmod +x nct_model/train
-chmod +x nct_model/serve
+chmod +x nct_scripts/train
+chmod +x nct_scripts/serve
 
-aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 639961517570.dkr.ecr.us-east-1.amazonaws.com
-#docker build -t nct-model-ecr .
-#docker tag nct-model-ecr:latest 639961517570.dkr.ecr.us-east-1.amazonaws.com/nct-model-ecr:latest
-#docker push 639961517570.dkr.ecr.us-east-1.amazonaws.com/nct-model-ecr:latest
-
-#full_image_name="639961517570.dkr.ecr.us-east-1.amazonaws.com/${IMAGE_NAME}:latest"
+aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${ACCOUNT}.dkr.ecr.us-east-1.amazonaws.com
 
 docker build -t ${IMAGE_NAME} .
-docker tag ${IMAGE_NAME}:latest 639961517570.dkr.ecr.us-east-1.amazonaws.com/${IMAGE_NAME}:latest
-docker push 639961517570.dkr.ecr.us-east-1.amazonaws.com/${IMAGE_NAME}:latest
+docker tag ${IMAGE_NAME}:latest ${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/${IMAGE_NAME}:latest
+#docker push ${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/${IMAGE_NAME}:latest

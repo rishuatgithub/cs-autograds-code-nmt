@@ -134,3 +134,4 @@ nct_model_estimator/nct_model/model/*.pth
 
 webapp/package-lock.json
 webapp/package.json
+nct_model_estimator/model/model_1.pth

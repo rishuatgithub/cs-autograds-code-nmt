@@ -19,5 +19,13 @@ ENV PYTHONUNBUFFERED=TRUE
 ENV PYTHONDONTWRITEBYTECODE=TRUE
 ENV PATH="/opt/program:${PATH}"
 
-COPY nct_model /opt/program
+#RUN echo 'python --version'
+#RUN echo '/usr/bin/env python --version'
+
+COPY nct_scripts /opt/program
+COPY model /opt/ml
+
+RUN chmod -R 775 /opt/program/
+RUN chmod -R 775 /opt/ml/
+
 WORKDIR /opt/program

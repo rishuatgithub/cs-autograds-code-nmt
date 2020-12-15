@@ -1,4 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3.5
+
+from __future__ import print_function
 
 import os
 import sys
@@ -17,9 +19,10 @@ training_path=os.path.join(input_path, channel_name)
 def train():
     print('starting the training')
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print('device detected: ',device)
     
     try: 
-        model = torch.load(model_path, map_location=device)
+        model = torch.load(model_path+'/model_1.pth', map_location=device)
         print('printing the model')
         print(model)
         print('training complete')
@@ -30,5 +33,11 @@ def train():
 
 
 if __name__=='__main__':
+    print("python version in use: ",sys.version)
+    arr = os.listdir('/opt/program/')
+    print(arr)
+    arr2 = os.listdir('/opt/ml/')
+    print(arr2)
+
     train()
     sys.exit(0)
