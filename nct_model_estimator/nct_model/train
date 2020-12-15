@@ -1,0 +1,34 @@
+#!/usr/bin/env python
+
+import os
+import sys
+import pandas as pd
+import torch
+
+
+prefix = '/opt/ml'
+input_path=os.path.join(prefix, 'input/data')
+output_path=os.path.join(prefix, 'output')
+model_path=os.path.join(prefix, 'model')
+
+channel_name='training'
+training_path=os.path.join(input_path, channel_name)
+
+def train():
+    print('starting the training')
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    
+    try: 
+        model = torch.load(model_path, map_location=device)
+        print('printing the model')
+        print(model)
+        print('training complete')
+    except Exception as e:
+        print('Error found during training')
+        print(str(e))
+        sys.exit(255)
+
+
+if __name__=='__main__':
+    train()
+    sys.exit(0)

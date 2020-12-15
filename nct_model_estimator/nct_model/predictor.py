@@ -5,6 +5,7 @@ import pandas as pd
 import argparse
 import os
 import sys
+import flask
 
 import fastBPE
 
@@ -13,16 +14,22 @@ from XLM.src.data.dictionary import Dictionary, BOS_WORD, EOS_WORD, PAD_WORD, UN
 from XLM.src.model import build_model
 from XLM.src.utils import AttrDict
 
-SUPPORTED_LANGUAGE=['java','python']
-MODEL_PATH='model/model_1.pth'
-BPE_PATH='data/BPE_with_comments_codes'
+app = flask.Flask(__name__)
 
-def get_params():
+prefix='/opt/ml'
+SUPPORTED_LANGUAGE=['java','python']
+MODEL_PATH=os.path.join(prefix,'model/model_1.pth')
+BPE_PATH=os.path.join(prefix,'data/BPE_with_comments_codes')
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
+"""def get_params():
     parser = argparse.ArgumentParser(description="Code Translator Params")
     parser.add_argument("--src_lang", type=str, default="java", help=f"Supported Language: {' '.join(SUPPORTED_LANGUAGE)}")
     parser.add_argument("--tgt_lang", type=str, default="python", help=f"Supported Language: {' '.join(SUPPORTED_LANGUAGE)}")
 
-    return parser
+    return parser """
 
 
 def model_fn(model_dir):
@@ -55,8 +62,10 @@ class NMTranslator:
         self.decoder = decoder1[0]
         self.decoder.load_state_dict(model['decoder'])
         
-        self.encoder.cuda()
-        self.decoder.cuda()
+        #self.encoder.cuda()
+        #self.decoder.cuda()
+        self.encoder.to(device)
+        self.decoder.to(device)
         
         self.bpe_model = fastBPE.fastBPE(os.path.abspath(BPE_PATH))
 
@@ -104,20 +113,20 @@ class NMTranslator:
 
 
 
-
-if __name__=='__main__':
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+@app.route('/predict', methods=['GET'])
+def predict():
     #print(f'Detected device: {device}')
-    params = get_params()
-
-    translator = NMTranslator(params)
-
-    input = sys.argv[1]
+    #params = get_params()
+    translator = NMTranslator()
+    #input = sys.argv[1]
+    input = "int c(){ return 10; }"
 
     with torch.no_grad():
         output = translator.predict_fn(input, lang1="java", lang2="python", n=1, beam_size=1)
 
-    print(output)
+    return flask.Response(response=output, status=200)
+
+    
 
     
 
