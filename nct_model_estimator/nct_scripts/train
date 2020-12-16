@@ -25,10 +25,12 @@ def train():
 
     files_path = [x for x in os.listdir(prefix)]
     print(files_path)
-    print(os.path.join(prefix,'model_1.pth'))
+    files_path2 = [x for x in os.listdir('/opt/ml/model/')]
+    print(files_path2)
+    #print(os.path.join(prefix,'model_1.pth'))
     
     try: 
-        model = torch.load(os.path.join(prefix,'model/model_1.pth'), map_location=device)
+        model = torch.load(os.path.join(prefix,'model/model/model_1.pth'), map_location=device)
         print('printing the model')
         #print(model)
         print('training complete')

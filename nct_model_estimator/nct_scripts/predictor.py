@@ -10,6 +10,7 @@ import os
 import sys
 import flask
 from flask import request
+import json
 
 import fastBPE
 
@@ -24,9 +25,9 @@ prefix='/opt/ml/'
 #prefix='/Users/rishushrivastava/Document/GitHub/cs-autograds-code-nmt/nct_model_estimator/'
 prefix2='/opt/program/'
 SUPPORTED_LANGUAGE=['java','python']
-MODEL_PATH=os.path.join(prefix,'model/model_1.pth')
-ENCODER_PATH=os.path.join(prefix,'model/encoder2.pkl')
-DECODER_PATH=os.path.join(prefix,'model/decoder2.pkl')
+MODEL_PATH=os.path.join(prefix,'model/model/model_1.pth')
+ENCODER_PATH=os.path.join(prefix,'model/model/encoder2.pkl')
+DECODER_PATH=os.path.join(prefix,'model/model/decoder2.pkl')
 
 #BPE_PATH=os.path.join(prefix,'data/BPE_with_comments_codes')
 BPE_PATH=os.path.join(prefix2,'data/BPE_with_comments_codes')
@@ -123,9 +124,11 @@ class NMTranslator:
             
             return results
 
+@app.route('/ping', methods=['GET'])
+def ping():
+    return flask.Response(response='{"result":"PING Success"}', status=200, mimetype='application/json')
 
-
-@app.route('/predict', methods=['POST'])
+@app.route('/invocations', methods=['POST'])
 def predict():
     print(f'Detected device: {device}')
     #params = get_params()
@@ -150,7 +153,7 @@ def predict():
     result['input']=input
     result['output']=output[0]
 
-    return result
+    return flask.Response(response=json.dumps(result), status=200, mimetype='application/json')
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+#if __name__ == '__main__':
+#    app.run(host='0.0.0.0')
