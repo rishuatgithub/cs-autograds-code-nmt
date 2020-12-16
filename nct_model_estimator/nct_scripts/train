@@ -25,11 +25,12 @@ def train():
 
     files_path = [x for x in os.listdir(prefix)]
     print(files_path)
+    print(os.path.join(prefix,'model_1.pth'))
     
     try: 
         model = torch.load(os.path.join(prefix,'model_1.pth'), map_location=device)
         print('printing the model')
-        print(model)
+        #print(model)
         print('training complete')
     except Exception as e:
         print('Error found during training')
