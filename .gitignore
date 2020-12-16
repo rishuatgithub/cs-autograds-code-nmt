@@ -136,3 +136,9 @@ webapp/package-lock.json
 webapp/package.json
 nct_model_estimator/model/model_1.pth
 nct_model_estimator/model/model.tar.gz
+awskeypair/gickeypair.pem
+nct_model_estimator/model/decoder2.pkl
+nct_model_estimator/model/drive-download-20201215T194722Z-001.zip
+nct_model_estimator/model/encoder2.pkl
+*.pkl
+*.pth

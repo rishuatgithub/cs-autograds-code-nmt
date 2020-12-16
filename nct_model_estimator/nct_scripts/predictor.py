@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.8
+#!/usr/bin/env python3
 from __future__ import print_function
 
 import torch
@@ -9,20 +9,27 @@ import argparse
 import os
 import sys
 import flask
+from flask import request
 
 import fastBPE
 
 import preprocessing.src.code_tokenizer as code_tokenizer
 from XLM.src.data.dictionary import Dictionary, BOS_WORD, EOS_WORD, PAD_WORD, UNK_WORD, MASK_WORD
-from XLM.src.model import build_model
+#from XLM.src.model import build_model
 from XLM.src.utils import AttrDict
 
 app = flask.Flask(__name__)
 
-prefix='/opt/ml'
+prefix='/opt/ml/'
+#prefix='/Users/rishushrivastava/Document/GitHub/cs-autograds-code-nmt/nct_model_estimator/'
+prefix2='/opt/program/'
 SUPPORTED_LANGUAGE=['java','python']
-MODEL_PATH=os.path.join(prefix,'model/model_1.pth')
-BPE_PATH=os.path.join(prefix,'data/BPE_with_comments_codes')
+MODEL_PATH=os.path.join(prefix,'model_1.pth')
+ENCODER_PATH=os.path.join(prefix,'encoder2.pkl')
+DECODER_PATH=os.path.join(prefix,'decoder2.pkl')
+
+#BPE_PATH=os.path.join(prefix,'data/BPE_with_comments_codes')
+BPE_PATH=os.path.join(prefix2,'data/BPE_with_comments_codes')
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -41,7 +48,7 @@ def model_fn(model_dir):
 
 
 class NMTranslator:
-    def __init__(self, params):
+    def __init__(self):
         model = model_fn(MODEL_PATH)
         model['encoder'] = {(k[len('module.'):] if k.startswith('module.') else k):v for k, v in model['encoder'].items()}
         
@@ -57,7 +64,9 @@ class NMTranslator:
         self.dico = Dictionary(model['dico_id2word'], model['dico_word2id'], model['dico_counts'])
         self.model_params['reload_model'] = ','.join([MODEL_PATH] * 2)
 
-        encoder1, decoder1 = build_model(self.model_params, self.dico)
+        #encoder1, decoder1 = build_model(self.model_params, self.dico)
+        encoder1 = model_fn(ENCODER_PATH)
+        decoder1 = model_fn(DECODER_PATH)
 
         self.encoder = encoder1[0]
         self.encoder.load_state_dict(model['encoder'])
@@ -116,21 +125,28 @@ class NMTranslator:
 
 
 
-@app.route('/predict', methods=['GET'])
+@app.route('/predict', methods=['POST'])
 def predict():
-    #print(f'Detected device: {device}')
+    print(f'Detected device: {device}')
     #params = get_params()
     translator = NMTranslator()
     #input = sys.argv[1]
-    input = "int c(){ return 10; }"
+    #input = "int c(){ return 10; }"
+    input = request.get_json(force=True)['input']
 
+    print(request.get_json(force=True))
+
+    result = {}
     with torch.no_grad():
-        output = translator.predict_fn(input, lang1="java", lang2="python", n=1, beam_size=1)
-
-    return flask.Response(response=output, status=200)
-
+        if input != None:
+            output = translator.predict_fn(input, lang1="java", lang2="python", n=1, beam_size=1)
+        else:
+            output = [["No Input data found."]]
     
+    result['input']=input
+    result['output']=output[0]
 
-    
+    return result
 
-    
+if __name__ == '__main__':
+    app.run()

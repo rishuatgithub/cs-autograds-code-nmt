@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.8
+#!/usr/bin/env python3
 
 from __future__ import print_function
 
@@ -6,12 +6,14 @@ import os
 import sys
 import pandas as pd
 import torch
+#import fastBPE
 
 
-prefix = '/opt/ml'
+prefix = '/opt/ml/'
+#prefix = '/Users/rishushrivastava/Document/GitHub/cs-autograds-code-nmt/model/'
 input_path=os.path.join(prefix, 'input/data')
-output_path=os.path.join(prefix, 'output')
-model_path=os.path.join(prefix, 'model')
+output_path=os.path.join(prefix, 'output/')
+#model_path=os.path.join(prefix, 'model/')
 
 channel_name='training'
 training_path=os.path.join(input_path, channel_name)
@@ -20,9 +22,12 @@ def train():
     print('starting the training')
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print('device detected: ',device)
+
+    files_path = [x for x in os.listdir(prefix)]
+    print(files_path)
     
     try: 
-        model = torch.load(model_path+'/model_1.pth', map_location=device)
+        model = torch.load(os.path.join(prefix,'model_1.pth'), map_location=device)
         print('printing the model')
         print(model)
         print('training complete')
@@ -34,10 +39,9 @@ def train():
 
 if __name__=='__main__':
     print("python version in use: ",sys.version)
-    arr = os.listdir('/opt/program/')
-    print(arr)
-    arr2 = os.listdir('/opt/ml/')
-    print(arr2)
-
+    #arr = os.listdir('/opt/program/')
+    #print(arr)
+    
     train()
+
     sys.exit(0)

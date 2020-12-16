@@ -1,47 +1,36 @@
-FROM nvidia/cuda:11.1-base-ubuntu20.04
-CMD nvidia-smi
-#FROM ubuntu:18.04
+#FROM nvidia/cuda:11.1-base-ubuntu20.04
+#CMD nvidia-smi
+FROM ubuntu:18.04
 
 RUN apt-get -y update
 RUN apt-get install -y apt-utils 
 RUN apt-get update && \
     apt-get install --no-install-recommends -y \
-    python3.8 python3-pip python3.8-dev \
-    nginx ca-certificates wget
-#RUN apt-get install -y python3
-#RUN apt-get -y update && apt-get install -y --no-install-recommends \
-#        wget \
-#        python3 \
-#        nginx \
-#		libgcc-5-dev \
-#        ca-certificates \
-#	    libevent-dev \
-#	    python-all-dev \
-#	    python3-dev \
-#    && rm -rf /var/lib/apt/lists/*
+    python3.8 python3-pip libpython3.6-dev \
+    ca-certificates libgcc-5-dev libevent-dev git
+RUN apt-get install -y python3.8-dev gcc g++
 
-#RUN apt-get install python3-pip
-#RUN wget https://bootstrap.pypa.io/3.3/get-pip.py && python3.5 get-pip.py
-#RUN apt-get install python-setuptools
-RUN pip3 install --upgrade pip
-RUN pip3 install numpy pandas torch flask clang sacrebleu
-#RUN easy_install gevent
-RUN pip3 install gevent
-RUN pip3 install gunicorn && \
-       # (cd /usr/local/lib/python3/dist-packages/scipy/.libs; rm *; ln ../../numpy/.libs/* .) && \
-        rm -rf /root/.cache
+RUN python3 -m pip install --upgrade pip setuptools wheel Cython
+
+COPY requirements.txt .
+RUN python3 -m pip install -r requirements.txt
+RUN pip3 install fastBPE
+
+#RUN git clone https://github.com/glample/fastBPE
+#WORKDIR fastBPE
+#RUN g++ -std=c++11 -pthread -O3 fastBPE/main.cc -IfastBPE -o fast
+#RUN python3 setup.py install
 
 ENV PYTHONUNBUFFERED=TRUE
 ENV PYTHONDONTWRITEBYTECODE=TRUE
 ENV PATH="/opt/program:${PATH}"
 
-#RUN echo 'python --version'
-#RUN echo '/usr/bin/env python --version'
+EXPOSE 5000
 
 COPY nct_scripts /opt/program
-#COPY model /opt/ml
 
 RUN chmod -R 775 /opt/program/
-#RUN chmod -R 775 /opt/ml/
 
 WORKDIR /opt/program
+
+CMD ["./predictor.py"]
