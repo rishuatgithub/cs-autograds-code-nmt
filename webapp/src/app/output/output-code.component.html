@@ -1,0 +1,21 @@
+<div style="height: 47px;">
+    <span class="h4" style="color: #103f7c; line-height: 47px;">Output ({{language}})</span>
+    <button mat-icon-button [disabled]="!displayCode()" color="primary" #tooltip="matTooltip" matTooltip="Download code" matTooltipHideDelay="100"
+        style="float: right;">
+        <mat-icon>get_app</mat-icon>
+    </button>
+    <button mat-icon-button [disabled]="!displayCode()" color="primary" style="color: #255899;" #tooltip="matTooltip" matTooltip="Copy code" matTooltipHideDelay="100" style="float: right;">
+        <mat-icon >content_copy</mat-icon>
+    </button>
+</div>
+<div style="border: 1px solid #ced4da; border-radius: .25rem;min-height: 590px;">
+    <nav mat-tab-nav-bar>
+        <a mat-tab-link *ngFor="let tab of tabs" (click)="changeActiveTab(tab)" [active]="activeTab === tab"> {{tab}} </a>
+    </nav>
+    <div>
+        <div *ngIf="displayCode() && activeTab === 'Code'">
+            <pre><code [highlight]="code" [lineNumbers]="true" [languages]="highlightCode"></code></pre>
+        </div>
+        <div id="ast-container" [ngStyle]="{ 'display' : activeTab === 'AST' ? 'block' : 'none' }"></div>
+    </div>
+</div>

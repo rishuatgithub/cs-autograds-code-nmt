@@ -1,0 +1,12 @@
+<div style="height: 47px;">
+    <span class="h4" style="color: #103f7c; line-height: 47px;">Input ({{language}})</span>
+    <button mat-icon-button color="primary" #tooltip="matTooltip" matTooltip="Upload a file" matTooltipHideDelay="100" (click)="inputFileElement.click()">
+        <mat-icon>publish</mat-icon>
+    </button>
+    <input #inputFileElement id="file" type="file" accept=".txt" (change)="onFileSelected($event)"  hidden>
+</div>
+<form>
+    <div class="form-group">
+        <textarea name="inputCode" [(ngModel)]="code" (ngModelChange)="codeChanged($event)" class="form-control" rows="29"></textarea>
+    </div>
+</form>

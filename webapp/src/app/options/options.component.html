@@ -1,0 +1,50 @@
+<mat-card>
+    <div class="row" style="margin: 0px;">
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <mat-card style="float: right; padding: 8px;" class="option-card">
+                <div style="color: #1a73e8;font-weight: 500;font-size: .875rem;height: 30px;">
+                    <span style="line-height: 30px;margin: 0px;">From</span>
+                    <button mat-icon-button [matMenuTriggerFor]="menuFrom" style="float: right;">
+                        <mat-icon>keyboard_arrow_down</mat-icon>
+                    </button>
+                    <mat-menu #menuFrom="matMenu">
+                        <button mat-menu-item *ngFor="let lang of inputLanguages" [disabled]="!lang.enabled" (click)="setInputLanguage(lang)">
+                            <mat-icon [ngClass]="getEnabledClass(lang.enabled)">{{lang.enabled ? 'check_circle' : 'highlight_off' }}</mat-icon>
+                            <span style="line-height: 20px;bottom: 0;vertical-align: middle;"> {{lang.name}}</span>
+                        </button>
+                    </mat-menu>
+                </div>
+                <div style="height: 25px;">
+                    <img [src]="inputLanguage?.icon" style="height: 25px;" [alt]="inputLanguage?.name">
+                    <span class="h5" style="line-height: 25px;bottom: 0;vertical-align: bottom;margin-bottom: 0;"> {{inputLanguage?.name}}</span>
+                </div>
+            </mat-card>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <mat-card class="option-card" style="padding: 8px;">
+                <div style="color: #1a73e8;font-weight: 500;font-size: .875rem;height: 30px;">
+                    <span style="line-height: 30px;margin: 0px;">To</span>
+                    <button mat-icon-button [matMenuTriggerFor]="menuTo" style="float: right;">
+                        <mat-icon>keyboard_arrow_down</mat-icon>
+                    </button>
+                    <mat-menu #menuTo="matMenu">
+                        <button mat-menu-item *ngFor="let lang of outputLanguages" [disabled]="!lang.enabled" (click)="setOutputLanguage(lang)">
+                            <mat-icon [ngClass]="getEnabledClass(lang.enabled)">{{lang.enabled ? 'check_circle' : 'highlight_off' }}</mat-icon>
+                            <span style="line-height: 20px;bottom: 0;vertical-align: middle;"> {{lang.name}}</span>
+                        </button>
+                    </mat-menu>
+                </div>
+                <div style="height: 25px;">
+                    <img [src]="outputLanguage?.icon" style="height: 25px;" [alt]="outputLanguage?.name">
+                    <span class="h5" style="line-height: 25px;bottom: 0;vertical-align: bottom;margin-bottom: 0;"> {{outputLanguage?.name}}</span>
+                </div>
+            </mat-card>
+        </div>
+    </div>
+    <div style="height: 10px;"></div>
+    <div class="row">
+        <div class="col-lg-12" style="display: flex; align-items: center; justify-content: center;">
+            <button mat-raised-button color="primary" style="margin-left: 10px;" type="button" (click)="generate()">Generate</button>
+        </div>
+    </div>
+</mat-card>

@@ -3,13 +3,9 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "code-nmt": {
+    "code-highlight": {
       "projectType": "application",
-      "schematics": {
-        "@schematics/angular:application": {
-          "strict": true
-        }
-      },
+      "schematics": {},
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -17,10 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "allowedCommonJsDependencies": [
-              "highlight.js"
-            ],
-            "outputPath": "dist/code-nmt",
+            "outputPath": "dist/code-highlight",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -39,8 +32,7 @@
             "scripts": [
               "./node_modules/jquery/jquery.min.js",
               "./node_modules/popper.js/dist/popper.min.js",
-              "./node_modules/bootstrap/dist/js/bootstrap.min.js",
-              "./node_modules/prismjs/prism.js"
+              "./node_modules/bootstrap/dist/js/bootstrap.min.js"
             ]
           },
           "configurations": {
@@ -61,13 +53,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
                 }
               ]
             }
@@ -76,18 +68,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "code-nmt:build"
+            "browserTarget": "code-highlight:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "code-nmt:build:production"
+              "browserTarget": "code-highlight:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "code-nmt:build"
+            "browserTarget": "code-highlight:build"
           }
         },
         "test": {
@@ -125,19 +117,19 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "code-nmt:serve"
+            "devServerTarget": "code-highlight:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "code-nmt:serve:production"
+              "devServerTarget": "code-highlight:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "code-nmt",
+  "defaultProject": "code-highlight",
   "cli": {
-    "analytics": "f953a249-8b2b-41c8-a8b1-dac4c42ed6f2"
+    "analytics": "a024615c-dac9-4c5b-afce-7e3c0412be49"
   }
 }
