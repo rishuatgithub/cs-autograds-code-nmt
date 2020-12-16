@@ -28,7 +28,7 @@ def train():
     print(os.path.join(prefix,'model_1.pth'))
     
     try: 
-        model = torch.load(os.path.join(prefix,'model_1.pth'), map_location=device)
+        model = torch.load(os.path.join(prefix,'model/model_1.pth'), map_location=device)
         print('printing the model')
         #print(model)
         print('training complete')

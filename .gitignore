@@ -142,3 +142,4 @@ nct_model_estimator/model/drive-download-20201215T194722Z-001.zip
 nct_model_estimator/model/encoder2.pkl
 *.pkl
 *.pth
+*.gz

@@ -24,9 +24,9 @@ prefix='/opt/ml/'
 #prefix='/Users/rishushrivastava/Document/GitHub/cs-autograds-code-nmt/nct_model_estimator/'
 prefix2='/opt/program/'
 SUPPORTED_LANGUAGE=['java','python']
-MODEL_PATH=os.path.join(prefix,'model_1.pth')
-ENCODER_PATH=os.path.join(prefix,'encoder2.pkl')
-DECODER_PATH=os.path.join(prefix,'decoder2.pkl')
+MODEL_PATH=os.path.join(prefix,'model/model_1.pth')
+ENCODER_PATH=os.path.join(prefix,'model/encoder2.pkl')
+DECODER_PATH=os.path.join(prefix,'model/decoder2.pkl')
 
 #BPE_PATH=os.path.join(prefix,'data/BPE_with_comments_codes')
 BPE_PATH=os.path.join(prefix2,'data/BPE_with_comments_codes')
@@ -132,7 +132,11 @@ def predict():
     translator = NMTranslator()
     #input = sys.argv[1]
     #input = "int c(){ return 10; }"
-    input = request.get_json(force=True)['input']
+    if flask.request.content_type == 'application/json':
+        input = request.get_json(force=True)['input']
+    else:
+        return flask.Response(response='This predictor only supports json data', status=415, mimetype='text/plain')
+    
 
     print(request.get_json(force=True))
 
