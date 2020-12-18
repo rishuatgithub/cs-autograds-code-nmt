@@ -31,7 +31,12 @@
         </div>
         <div *ngIf="showGS()" style="padding: 10px;font-weight: 500;font-size: .875rem;">
             <div class="alert" [ngClass]="getSummaryClass()">
-                {{summary}} with Probability {{summaryProbability}}%.
+                <table style="border-collapse: collapse;">
+                    <tr>
+                        <td style="border-right-width: 2px;border-right-style: solid;text-align: center;padding-right: 5px;"><small>Probability</small><h4>{{summaryProbability}} %</h4></td>
+                        <td style="padding-left: 5px;">{{summary}}</td>
+                    </tr>
+                </table>
             </div>
         </div>
         <div style="position: absolute;left: 47%;top: 47%;" *ngIf="showProgressSpinner()">
