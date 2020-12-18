@@ -5,16 +5,43 @@ export interface ILanguage {
     highlightCode?: string
 }
 
+//VB, COBOL, SQL, C++ JAVA, PYTHON
 export const INPUT_LANGUAGES: ILanguage[] = [
     { 
         name: 'Java', 
         icon: '../assets/java-brands.svg',
-        enabled: true
+        enabled: true,
+        highlightCode: 'java'
+    },
+    {
+        name: 'C++',
+        icon: '../assets/cpp-brands.svg',
+        enabled: false,
+        highlightCode: 'cpp'
     },
     { 
         name: 'VB .Net',
-        icon: '../assets/java-brands.svg',
-        enabled: false
+        icon: '../assets/vb-brands.svg',
+        enabled: false,
+        highlightCode: 'vb'
+    },
+    {
+        name: 'Pearl',
+        icon: '../assets/pearl-brands.svg',
+        enabled: false,
+        highlightCode: 'pearl'
+    },
+    {
+        name: 'C#',
+        icon: '../assets/csharp-brands.svg',
+        enabled: false,
+        highlightCode: 'csharp'
+    },
+    {
+        name: 'COBOL',
+        icon: '../assets/cobol-brands.svg',
+        enabled: false,
+        highlightCode: 'cobol'
     }
 ];
 
@@ -27,8 +54,26 @@ export const OUTPUT_LANGUAGES: ILanguage[] = [
     },
     { 
         name: 'C#', 
-        icon: '../assets/python-brands.svg',
+        icon: '../assets/csharp-brands.svg',
         enabled: false,
         highlightCode: 'csharp'
+    },
+    {
+        name: 'Java',
+        icon: '../assets/java-brands.svg',
+        enabled: false,
+        highlightCode: 'java'
+    },
+    {
+        name: 'Kotlin',
+        icon: '../assets/kotlin-brands.svg',
+        enabled: false,
+        highlightCode: 'kotlin'
+    },
+    {
+        name: 'C++',
+        icon: '../assets/cpp-brands.svg',
+        enabled: false,
+        highlightCode: 'cpp'
     }
 ];

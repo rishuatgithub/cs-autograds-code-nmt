@@ -53,4 +53,18 @@ export class OptionsComponent implements OnInit {
     getEnabledClass(enabled: boolean): string {
         return enabled ? 'enabled-language' : '';
     }
+
+    canSwap(): boolean {
+        if (this.outputLanguages.find(l => l.name == this.inputLanguage.name) &&
+            this.inputLanguages.find(l => l.name == this.outputLanguage.name)) {
+            return true;
+        }
+        return false;
+    }
+
+    swapLanguage(): void {
+        let lang: ILanguage = this.inputLanguage;
+        this.setInputLanguage(this.outputLanguage);
+        this.setOutputLanguage(lang);
+    }
 }

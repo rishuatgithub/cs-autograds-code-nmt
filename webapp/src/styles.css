@@ -18,6 +18,13 @@ a:hover {
   padding: 8px;
 }
 
+.swap-button {
+  position: absolute;
+  left: 48.95%;
+  color: #3f51b5;
+  z-index: 999;
+}
+
 button:focus {
   outline: none;
   box-shadow: none;
@@ -156,4 +163,123 @@ svg path.vtree-table {
     border: 0px;
     border-radius: 8px;
     pointer-events: none;
+}
+
+@media (min-width: 470px) {
+  .option-card {
+    width: 100%;
+    margin-bottom: 12px;
+    margin-top: 12px;
+  }
+
+  .swap-button {
+    left: 45.8%;
+    top: 91px;
+  }
+}
+
+@media (min-width: 576px) {
+  .option-card {
+    width: 100%;
+    margin-bottom: 0px;
+  }
+
+  .swap-button {
+    left: 46.4%;
+    top: 45px;
+  }
+}
+
+@media (min-width: 632px) {
+  .option-card {
+    width: 100%;
+    margin-bottom: 0px;
+  }
+
+  .swap-button {
+    left: 46.7%;
+    top: 45px;
+  }
+}
+
+@media (min-width: 690px) {
+  .option-card {
+    width: 100%;
+    margin-bottom: 0px;
+  }
+
+  .swap-button {
+    left: 47%;
+    top: 45px;
+  }
+}
+
+@media (min-width: 760px) {
+  .option-card {
+    width: 100%;
+  }
+
+  .swap-button {
+    left: 47.28%;
+  }
+}
+
+@media (min-width: 768px) {
+  .option-card {
+    width: 78%;
+  }
+
+  .swap-button {
+    left: 47.3%;
+  }
+}
+
+@media (min-width: 958px) {
+  .option-card {
+    width: 70%;
+  }
+
+  .swap-button {
+    left: 47.95%;
+  }
+}
+
+@media (min-width: 992px) {
+  .option-card {
+    width: 70%;
+  }
+
+  .swap-button {
+    left: 47.95%;
+  }
+}
+
+@media (min-width: 1100px) {
+  .option-card {
+    width: 70%;
+  }
+
+  .swap-button {
+    left: 48.1%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .option-card {
+    width: 55%;
+  }
+
+  .swap-button {
+    left: 48.25%;
+  }
+}
+
+@media (min-width: 1900px) {
+  .option-card {
+    width: 40%;
+  }
+
+  .swap-button {
+    left: 48.94%;
+  }
 }

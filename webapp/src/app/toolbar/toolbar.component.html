@@ -1,12 +1,13 @@
 <div style="box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12), 0 2px 4px -1px rgba(0,0,0,0.2);">
     <mat-toolbar color="primary">
-        <button mat-icon-button>
+        <button mat-icon-button (click)="openAbout()">
             <mat-icon>multiple_stop</mat-icon>
         </button>
-        <h2>Neural Code Translator</h2>
+        <span style="font-weight: 390;font-size: .780rem;position: absolute;top: 3px; left: 56px;">CS-Autograds</span>
+        <h2 style="position: absolute;top: 22px; left: 56px;">Neural Code Translator</h2>
         <span style="flex: 1 1 auto;"></span>
-        <button mat-icon-button #tooltip="matTooltip" matTooltip="About" matTooltipHideDelay="100">
-            <mat-icon>info</mat-icon>
+        <button mat-icon-button #tooltip="matTooltip" matTooltip="Help" matTooltipHideDelay="100" (click)="openAbout()">
+            <mat-icon>help_outline</mat-icon>
         </button>
     </mat-toolbar>
 </div>

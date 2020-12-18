@@ -1,21 +1,41 @@
 <div style="height: 47px;">
     <span class="h4" style="color: #103f7c; line-height: 47px;">Output ({{language}})</span>
-    <button mat-icon-button [disabled]="!displayCode()" color="primary" #tooltip="matTooltip" matTooltip="Download code" matTooltipHideDelay="100"
-        style="float: right;">
+    <button mat-icon-button [disabled]="!hasCode()" color="primary" #tooltip="matTooltip" matTooltip="Download code"
+        matTooltipHideDelay="100" style="float: right;" (click)="downloadCode()">
         <mat-icon>get_app</mat-icon>
     </button>
-    <button mat-icon-button [disabled]="!displayCode()" color="primary" style="color: #255899;" #tooltip="matTooltip" matTooltip="Copy code" matTooltipHideDelay="100" style="float: right;">
-        <mat-icon >content_copy</mat-icon>
+    <button mat-icon-button [disabled]="!hasCode()" color="primary" style="color: #255899;" #tooltip="matTooltip"
+        matTooltip="Copy code" matTooltipHideDelay="100" style="float: right;" [cdkCopyToClipboard]="code">
+        <mat-icon>content_copy</mat-icon>
     </button>
+    <button mat-icon-button [disabled]="!showAST()" color="primary" style="color: #255899;" #tooltip="matTooltip"
+        matTooltip="Edit AST" matTooltipHideDelay="100" style="float: right;">
+        <mat-icon>edit</mat-icon>
+    </button>
+    <span style="margin-left: 20px;">
+        <mat-slide-toggle class="example-margin" color="primary" [(ngModel)]="analyticsChecked" (ngModelChange)="analyticsCheckChanged($event)"
+            style="font-weight: 500;font-size: .875rem;color: #103f7c;">Analytics</mat-slide-toggle>
+    </span>
 </div>
 <div style="border: 1px solid #ced4da; border-radius: .25rem;min-height: 590px;">
     <nav mat-tab-nav-bar>
-        <a mat-tab-link *ngFor="let tab of tabs" (click)="changeActiveTab(tab)" [active]="activeTab === tab"> {{tab}} </a>
+        <a mat-tab-link *ngFor="let tab of tabs" (click)="changeActiveTab(tab.id)" [active]="activeTab === tab.id" [disabled]="disableOptions()">
+            {{tab.name}} </a>
     </nav>
     <div>
-        <div *ngIf="displayCode() && activeTab === 'Code'">
+        <div *ngIf="showCode()">
             <pre><code [highlight]="code" [lineNumbers]="true" [languages]="highlightCode"></code></pre>
         </div>
-        <div id="ast-container" [ngStyle]="{ 'display' : activeTab === 'AST' ? 'block' : 'none' }"></div>
+        <div style="overflow:hidden;width: 100%;" [ngStyle]="{ 'display' : showAST() ? 'block' : 'none' }">
+            <div id="ast-container" ></div>
+        </div>
+        <div *ngIf="showGS()" style="padding: 10px;font-weight: 500;font-size: .875rem;">
+            <div class="alert" [ngClass]="getSummaryClass()">
+                {{summary}} with Probability {{summaryProbability}}%.
+            </div>
+        </div>
+        <div style="position: absolute;left: 47%;top: 47%;" *ngIf="showProgressSpinner()">
+            <mat-spinner style="margin: auto;"></mat-spinner>
+        </div>
     </div>
 </div>

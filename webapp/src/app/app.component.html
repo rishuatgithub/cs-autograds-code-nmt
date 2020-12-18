@@ -5,10 +5,13 @@
   <mat-card>
     <div class="row">
       <div class="col-lg-6">
-        <input-code [code]="inputCode" [language]="inputLanguage?.name" (codeChange)="inputCodeChange($event)"></input-code>
+        <input-code [code]="inputCode" [language]="inputLanguage?.name" [highlightCode]="highlightIntputCode"
+          [editCode]="editInput" [converting]="converting" (editCodeChanged)="inputCodeEditChange()" (codeChange)="inputCodeChange($event)">
+        </input-code>
       </div>
       <div class="col-lg-6">
-        <output-code [code]="outputCode" [language]="outputLanguage?.name" [highlightCode]="highlightCode"></output-code>
+        <output-code [code]="outputCode" [language]="outputLanguage?.name" [highlightCode]="highlightOutputCode"
+          [ast]="astData" [summary]="generalSummary?.description" [summaryProbability]="generalSummary?.probability" [converting]="converting"></output-code>
       </div>
     </div>
   </mat-card>

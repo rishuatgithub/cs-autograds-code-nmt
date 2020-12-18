@@ -1,12 +1,24 @@
 <div style="height: 47px;">
     <span class="h4" style="color: #103f7c; line-height: 47px;">Input ({{language}})</span>
-    <button mat-icon-button color="primary" #tooltip="matTooltip" matTooltip="Upload a file" matTooltipHideDelay="100" (click)="inputFileElement.click()">
+    <button mat-icon-button color="primary" #tooltip="matTooltip" matTooltip="Upload a file" matTooltipHideDelay="100"
+        (click)="inputFileElement.click()" *ngIf="editCode">
         <mat-icon>publish</mat-icon>
     </button>
-    <input #inputFileElement id="file" type="file" accept=".txt" (change)="onFileSelected($event)"  hidden>
+    <button mat-icon-button color="primary" #tooltip="matTooltip" matTooltip="Edit input" matTooltipHideDelay="100"
+        (click)="enableCodeEdit()" *ngIf="!editCode">
+        <mat-icon>edit</mat-icon>
+    </button>
+    <input #inputFileElement id="file" type="file" accept=".txt" (change)="onFileSelected($event)" hidden>
 </div>
 <form>
-    <div class="form-group">
-        <textarea name="inputCode" [(ngModel)]="code" (ngModelChange)="codeChanged($event)" class="form-control" rows="29"></textarea>
+    <div class="form-group" *ngIf="editCode">
+        <textarea name="inputCode" [(ngModel)]="code" (ngModelChange)="codeChanged($event)" class="form-control"
+            rows="29" [readonly]="converting" style="background-color: #fff;font-family: monospace;"></textarea>
+    </div>
+    <div style="border: 1px solid #ced4da; border-radius: .25rem;min-height: 590px;" *ngIf="!editCode">
+        <pre style="margin-top: 1px;"><code [highlight]="code" [lineNumbers]="true" [languages]="highlightCode"></code></pre>
+    </div>
+    <div style="position: absolute;left: 47%;top: 47%;" *ngIf="converting">
+        <mat-spinner style="margin: auto;">Converting ...</mat-spinner>
     </div>
 </form>

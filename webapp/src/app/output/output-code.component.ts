@@ -1,25 +1,36 @@
-import { Component, Input, OnInit, AfterViewInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 
 import "../../assets/vtree.min.js";
 declare var vtree: any;
+
+export interface ITab {
+    id: string,
+    name: string
+}
 
 @Component({
     selector: 'output-code',
     templateUrl: './output-code.component.html'
 })
 export class OutputCodeComponent implements OnInit {
-    @Input() code: string = '';
     @Input() language: string = '';
     @Input() highlightCode: string[] = [];
+    @Input() code: string = '';
+    @Input() ast: any = {};
+    @Input() summary: string = '';
+    @Input() summaryProbability: number = 0;
+    @Input() converting: boolean = false;
 
     vt:any;
-    astData:any = {};
-    selectedTabIndex:number = 0;
-    astTree:string = '';
-    tabs: string[] = ['Code', 'AST', 'General Summary'];
-    activeTab: string = this.tabs[0];
+    tabs:ITab[] = [
+        { id: 'code', name: 'Code' },
+        { id: 'ast', name: 'Syntax Tree' },
+        { id: 'gs', name: 'General Summary' }
+    ];
+    activeTab: string = this.tabs[0].id;
+    analyticsChecked:boolean = true;
 
-    displayCode(): boolean {
+    hasCode(): boolean {
         if (this.code && this.code.trim() != '') {
             return true;
         }
@@ -27,55 +38,108 @@ export class OutputCodeComponent implements OnInit {
     }
 
     ngOnInit() {
-        //this.astData = { "_PyType": "Module", "body": [{ "_PyType": "If", "test": { "_PyType": "Compare", "left": { "_PyType": "Name", "id": "a", "ctx": { "_PyType": "Load" } }, "ops": [{ "_PyType": "Eq" }], "comparators": [{ "_PyType": "Num", "n": 3 }] }, "body": [{ "_PyType": "Print", "dest": null, "values": [{ "_PyType": "Str", "s": "hello" }], "nl": true }], "orelse": [] }] };
         this.vt = vtree(document.getElementById('ast-container'));
         this.vt.mode(this.vt.MODE_PYTHON_AST)
             .data({})
             .conf('showArrayNode', false)
+            .conf('showLinkName', false)
             .update();
     }
 
-    showAst(): void {
-        console.log('ShowAST called')
-        
+    isActive(code: string) {
+        return this.activeTab === code;
+    }
+
+    analyticsCheckChanged($event:any): void {
+        if(!$event) {
+            this.activeTab = this.tabs[0].id;
+        }
+    }
+
+    disableOptions(): boolean {
+        return this.converting || !this.analyticsChecked || !this.hasCode();
+    }
+
+    showCode(): boolean {
+        return (!this.converting) &&
+            (this.hasCode() &&
+                this.isActive('code'));
+    }
+
+    showAST(): boolean {
+        return (!this.converting) &&
+            (this.analyticsChecked &&
+                this.hasCode() &&
+                this.isActive('ast') &&
+                this.ast);
+    }
+
+    showGS(): boolean {
+        return (!this.converting) &&
+            (this.analyticsChecked &&
+                this.hasCode() &&
+                this.isActive('gs') &&
+                this.summary?.trim() != '');
+    }
+
+    showProgressSpinner(): boolean {
+        return this.converting;
     }
 
     changeActiveTab(tab: string) {
-        this.activeTab = tab;
-        if(this.activeTab === 'AST') {
-            this.astData = { "_PyType": "Module", "body": [{ "_PyType": "If", "test": { "_PyType": "Compare", "left": { "_PyType": "Name", "id": "a", "ctx": { "_PyType": "Load" } }, "ops": [{ "_PyType": "Eq" }], "comparators": [{ "_PyType": "Num", "n": 3 }] }, "body": [{ "_PyType": "Print", "dest": null, "values": [{ "_PyType": "Str", "s": "hello" }], "nl": true }], "orelse": [] }] };
-            if(!this.vt) {
-                this.vt = vtree(document.getElementById('ast-container'));
-                this.vt.mode(this.vt.MODE_PYTHON_AST)
-                    .data(this.astData)
-                    .update();
-            } else {
-                (async () => {
-                    await this.delay(1);
-                    this.vt.data(this.astData).update();
-                })();
+        if (this.activeTab != tab) {
+            this.activeTab = tab;
+            if (this.isActive('ast')) {
+                this.updateAST();
             }
         }
     }
 
-     delay(ms: number) {
+    getSummaryClass(): string {
+        return this.summaryProbability ? (
+            this.summaryProbability > 80 ? 'alert-success' : (
+                this.summaryProbability > 65 ? 'alert-info' : (
+                    this.summaryProbability > 45 ? 'alert-warning' : (
+                        this.summaryProbability > 30 ? 'alert-danger' : 'alert-secondary'
+                    )
+                )
+            )
+        ) : 'alert-primary';
+    }
+
+    updateAST(): void {
+        let data = JSON.parse(JSON.stringify(this.ast));
+        if (!this.vt) {
+            this.vt = vtree(document.getElementById('ast-container'));
+            this.vt.mode(this.vt.MODE_PYTHON_AST)
+                .data(data)
+                .conf('showArrayNode', false)
+                .conf('showLinkName', false)
+                .update();
+        } else {
+            (async () => {
+                await this.delay(1);
+                this.vt.data(data).update();
+            })();
+        }
+    }
+
+    delay(ms: number) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
-    tabChanged($event: number) {
-        setTimeout(() => this.selectedTabIndex = $event, 2000);
-        // $event == 1 is AST tab
-        if($event == 1) {
-            let vtt = vtree(document.createElement('div'));
-            vtt.mode(vtt.MODE_PYTHON_AST)
-                .data(this.astData)
-                .conf('showArrayNode', false)
-                .update();
-            this.astTree = vtt.innerHTML;
-            // this.vt = vtree(document.getElementById('ast-container'));
-            // this.vt.mode(this.vt.MODE_PYTHON_AST)
-            //     .data(this.astData)
-            //     .conf('showArrayNode', false)
-            //     .update();
-        }
+
+    downloadCode(): void {
+        const blob: Blob = new Blob([this.code], { type: 'text' });
+        const fileName = 'output.py';
+        const objectUrl: string = URL.createObjectURL(blob);
+        const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+
+        a.href = objectUrl;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+
+        document.body.removeChild(a);
+        URL.revokeObjectURL(objectUrl);
     }
 }
