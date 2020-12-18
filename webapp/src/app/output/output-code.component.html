@@ -19,7 +19,7 @@
 </div>
 <div style="border: 1px solid #ced4da; border-radius: .25rem;min-height: 590px;">
     <nav mat-tab-nav-bar>
-        <a mat-tab-link *ngFor="let tab of tabs" (click)="changeActiveTab(tab.id)" [active]="activeTab === tab.id" [disabled]="disableOptions()">
+        <a mat-tab-link *ngFor="let tab of tabs" (click)="changeActiveTab(tab.id)" [active]="activeTab === tab.id" [disabled]="disableOptions(tab.id)">
             {{tab.name}} </a>
     </nav>
     <div>

@@ -56,8 +56,10 @@ export class OutputCodeComponent implements OnInit {
         }
     }
 
-    disableOptions(): boolean {
-        return this.converting || !this.analyticsChecked || !this.hasCode();
+    disableOptions(tab: string): boolean {
+        return this.converting || !this.hasCode() || (
+            !this.analyticsChecked && tab != 'code'
+        );
     }
 
     showCode(): boolean {

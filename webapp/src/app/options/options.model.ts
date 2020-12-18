@@ -26,10 +26,10 @@ export const INPUT_LANGUAGES: ILanguage[] = [
         highlightCode: 'vb'
     },
     {
-        name: 'Pearl',
-        icon: '../assets/pearl-brands.svg',
+        name: 'PERL',
+        icon: '../assets/perl-brands.svg',
         enabled: false,
-        highlightCode: 'pearl'
+        highlightCode: 'perl'
     },
     {
         name: 'C#',
