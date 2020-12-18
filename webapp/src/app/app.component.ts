@@ -21,7 +21,8 @@ export class AppComponent implements OnInit {
   outputCode: string = '';
   outputLanguage: ILanguage;
   highlightOutputCode: string[] = [];
-  generalSummary:any = {};
+  summary:any[] = [];
+  summaryProbability: number = 0;
   astData:any = {};
   converting:boolean = false;
   converted:boolean = false;
@@ -90,7 +91,7 @@ export class AppComponent implements OnInit {
           } else {
             this.outputCode = res.data.output;
             this.astData = res.data.ast;
-            this.generalSummary = res.data.summary;
+            this.parseSummary(res.data.summary);
             this.editInput = false;
             this.converted = true;
             this.openSnackBar('Code translated successfully !!');
@@ -101,6 +102,23 @@ export class AppComponent implements OnInit {
         }
         this.converting = false;
       });
+  }
+  
+  parseSummary(summary: any[]): void {
+    this.summaryProbability = 0;
+    for (let j = 0; j < this.summary.length; j++)
+      this.summary.pop();
+
+    if (summary && summary.length > 0) {
+      this.summary = summary;
+      for (let i = 0; i < summary.length; i++) {
+        if (summary[i].probability > this.summaryProbability) {
+          this.summaryProbability = summary[i].probability;
+        }
+      }
+    } else {
+      this.summaryProbability = 0;
+    }
   }
 
   inputCodeEditChange(): void {

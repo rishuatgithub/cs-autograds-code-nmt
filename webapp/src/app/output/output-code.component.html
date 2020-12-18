@@ -31,10 +31,21 @@
         </div>
         <div *ngIf="showGS()" style="padding: 10px;font-weight: 500;font-size: .875rem;">
             <div class="alert" [ngClass]="getSummaryClass()">
-                <table style="border-collapse: collapse;">
+                <div style="width: 100%; display: flex; align-items: center; justify-content: center;" *ngIf="!summary || summary.lenght == 0">
+                    <mat-icon>sentiment_very_dissatisfied</mat-icon>
+                    <span style="display: block;">No prediction available !</span>
+                </div>
+                <table style="border-collapse: collapse;width: 100%;" *ngIf="summary && summary.length > 0">
                     <tr>
                         <td style="border-right-width: 2px;border-right-style: solid;text-align: center;padding-right: 5px;"><small>Probability</small><h4>{{summaryProbability}} %</h4></td>
-                        <td style="padding-left: 5px;">{{summary}}</td>
+                        <td style="padding-left: 5px;">
+                            <table style="border-collapse: collapse;width: 100%;">
+                                <tr *ngFor="let s of summary">
+                                    <td style="text-align: right;">{{s.probability}} %</td>
+                                    <td> -> {{s.description}}</td>
+                                </tr>
+                            </table>
+                        </td>
                     </tr>
                 </table>
             </div>

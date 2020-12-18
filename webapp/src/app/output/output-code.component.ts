@@ -17,7 +17,7 @@ export class OutputCodeComponent implements OnInit {
     @Input() highlightCode: string[] = [];
     @Input() code: string = '';
     @Input() ast: any = {};
-    @Input() summary: string = '';
+    @Input() summary: any[] = [];
     @Input() summaryProbability: number = 0;
     @Input() converting: boolean = false;
 
@@ -80,8 +80,7 @@ export class OutputCodeComponent implements OnInit {
         return (!this.converting) &&
             (this.analyticsChecked &&
                 this.hasCode() &&
-                this.isActive('gs') &&
-                this.summary?.trim() != '');
+                this.isActive('gs'));
     }
 
     showProgressSpinner(): boolean {
@@ -98,6 +97,10 @@ export class OutputCodeComponent implements OnInit {
     }
 
     getSummaryClass(): string {
+        if(!this.summary || this.summary.length == 0) {
+            return 'alert-secondary';
+        }
+        
         return this.summaryProbability ? (
             this.summaryProbability > 80 ? 'alert-success' : (
                 this.summaryProbability > 65 ? 'alert-info' : (
