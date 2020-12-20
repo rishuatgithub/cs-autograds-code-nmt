@@ -143,3 +143,5 @@ nct_model_estimator/model/encoder2.pkl
 *.pkl
 *.pth
 *.gz
+*.pt
+nct_model_c2vec/test_source.txt

@@ -59,9 +59,9 @@ def beautify_pycode(data):
                 rmm.append(' '*3)
         rm.append(rmm)
     
-    output_cleaned = [''.join(o).replace(' : ',':').replace(' ( ','(').replace(' )',')') for o in rm]
+    output_cleaned = [''.join(o).replace(' : ',':').replace(' ( ','(').replace(' )',')').replace(' . ','.') for o in rm]
     
-    return str('\n'.join(output_cleaned))
+    return str('\n'.join(output_cleaned).replace(' ▁ ',''))
 
 
 def ast2json(node):
