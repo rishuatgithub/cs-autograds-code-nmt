@@ -102,7 +102,8 @@ def get_summary_sample(data):
     '''
         This is a sample code for summary generation
     '''
-    return [{ "description":"[Experimental] This code snippet represents a COUNT CHECK",
+    if 'countFromArray' in data:
+        output = [{ "description":"[Experimental] This code snippet represents a COUNT CHECK",
              "probability":89
              },
              { "description":"[Experimental] This code snippet represents a SUM",
@@ -111,6 +112,29 @@ def get_summary_sample(data):
              { "description":"[Experimental] This code snippet represents a PRIME t",
              "probability":0.05
              }]
+    elif 'httpRequest' in data:
+        output = [{ "description":"[Experimental] This code snippet represents a REQUEST",
+             "probability": 84.9
+             },
+             { "description":"[Experimental] This code snippet represents a return",
+             "probability":0.9
+             }]
+    elif 'isPrime' in data:
+        output = [{ "description":"[Experimental] This code snippet represents a PRIME",
+             "probability":90.33
+             },
+             { "description":"[Experimental] This code snippet represents a FACTORIAL",
+             "probability":1.99
+             },
+             { "description":"[Experimental] This code snippet represents a isPowerOf",
+             "probability":2
+             }]
+    else:
+        output = [{ "description":"[Experimental] Unable to predict. Still Learning.",
+             "probability":0.1
+             }]
+    
+    return output
     
 
 
@@ -134,5 +158,5 @@ def lambda_handler(event, context):
         'statusCode': 200,
         'output': out,
         'ast': ast,
-        'summary':get_summary_sample(ast)
+        'summary':get_summary_sample(data)
     }
