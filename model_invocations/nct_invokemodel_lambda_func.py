@@ -61,7 +61,7 @@ def beautify_pycode(data):
     
     output_cleaned = [''.join(o).replace(' : ',':').replace(' ( ','(').replace(' )',')').replace(' . ','.') for o in rm]
     
-    return str('\n'.join(output_cleaned).replace(' ▁ ',''))
+    return str('\n'.join(output_cleaned).replace(' ▁ ','').strip())
 
 
 def ast2json(node):
@@ -143,6 +143,7 @@ def lambda_handler(event, context):
     
     data = json.dumps(event)
 
+    print(data)
     response = runtime.invoke_endpoint(EndpointName=MODEL_ENDPOINT,
                                    ContentType='application/json',
                                    Body=data)
@@ -150,13 +151,21 @@ def lambda_handler(event, context):
     result = response['Body'].read().decode()
     
     jsonresult = json.loads(result)
-    out = beautify_pycode(jsonresult['output'])
-    ast = parse_py_ast(out)
     
+    out = []
+    for r in jsonresult['output']:
+        out.append(beautify_pycode(r))
+        
+    #print(out)
+    out_cleaned = "\n".join(out)
+    
+    ast = parse_py_ast(out_cleaned)
+    #ast = out_cleaned
+    #print(ast)
     
     return {
         'statusCode': 200,
-        'output': out,
+        'output': out_cleaned,
         'ast': ast,
         'summary':get_summary_sample(data)
     }
