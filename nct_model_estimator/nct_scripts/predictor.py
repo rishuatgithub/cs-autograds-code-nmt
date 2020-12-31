@@ -2,12 +2,7 @@
 from __future__ import print_function
 
 import torch
-import torch.nn as nn
-import numpy as np
-import pandas as pd
-import argparse
 import os
-import sys
 import flask
 from flask import request
 import json
@@ -15,7 +10,7 @@ import json
 import fastBPE
 
 import preprocessing.src.code_tokenizer as code_tokenizer
-from XLM.src.data.dictionary import Dictionary, BOS_WORD, EOS_WORD, PAD_WORD, UNK_WORD, MASK_WORD
+from XLM.src.data.dictionary import Dictionary, EOS_WORD
 #from XLM.src.model import build_model
 from XLM.src.utils import AttrDict
 
@@ -101,6 +96,7 @@ class NMTranslator:
             len1 = len(input.split())
             len1 = torch.LongTensor(1).fill_(len1).to(device)
 
+            #print(">>> ",input.split())
             x1 = torch.LongTensor([self.dico.index(w) for w in input.split()]).to(device)[:, None]
 
             langs1 = x1.clone().fill_(lang1_id)
@@ -124,19 +120,64 @@ class NMTranslator:
             
             return results
 
+
+def splitJavaInputByBlocks(input):
+    input_split = input.split()
+    block_pos = []
+    block_counter = 0
+    #block_pos.append(-1)
+    for b, i in enumerate(input_split):
+        #print(b,'.  ',i)
+        if '{' in i:
+            block_counter += 1
+            #print(">",block_counter)
+        if '}' in i:
+            block_counter -= 1
+            #print("<",block_counter)
+            if block_counter == 0:
+                block_pos.append(b)
+    #print(input_split)
+    #print(block_pos)
+    
+    output = []
+    start_pos = []
+    for i, bpos in enumerate(block_pos):
+        if i == 0:
+            start_pos.append(0)
+        else:
+            start_pos.append(block_pos[i-1]+1)
+    
+    #print(start_pos)
+    
+    for i, end_pos in enumerate(block_pos):
+        output.append(input_split[start_pos[i]:end_pos+1])
+        
+    return [' '.join(o) for o in output]
+
+
+
 @app.route('/ping', methods=['GET'])
 def ping():
     return flask.Response(response='{"result":"PING Success"}', status=200, mimetype='application/json')
 
+
 @app.route('/invocations', methods=['POST'])
 def predict():
     print(f'Detected device: {device}')
-    #params = get_params()
+    
     translator = NMTranslator()
-    #input = sys.argv[1]
-    #input = "int c(){ return 10; }"
+
     if flask.request.content_type == 'application/json':
         input = request.get_json(force=True)['input']
+
+        #if request.get_json(force=True)['lang1'] == None or request.get_json(force=True)['lang2'] == None:
+        # print('Unable to detech any input logic. using the default languages: java and python')
+        lang1 = 'java'
+        lang2 = 'python'
+        #else:
+        #    lang1 = request.get_json(force=True)['lang1']
+        #   lang2 = request.get_json(force=True)['lang2']
+            
     else:
         return flask.Response(response='This predictor only supports json data', status=415, mimetype='text/plain')
     
@@ -145,13 +186,18 @@ def predict():
 
     result = {}
     with torch.no_grad():
+        output = []
         if input != None:
-            output = translator.predict_fn(input, lang1="java", lang2="python", n=1, beam_size=1)
+            if lang1=='java':
+                input_splitted = splitJavaInputByBlocks(input)
+            
+            for codeblocks in input_splitted:
+                output.extend(translator.predict_fn(codeblocks, lang1=lang1, lang2=lang2, n=1, beam_size=1))
         else:
-            output = [["No Input data found."]]
+            output.extend("No Input data found.")
     
     result['input']=input
-    result['output']=output[0]
+    result['output']=output
 
     return flask.Response(response=json.dumps(result), status=200, mimetype='application/json')
 
