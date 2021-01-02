@@ -159,8 +159,8 @@ def lambda_handler(event, context):
     data_jsonload = json.loads(data)
     
     input_data = data_jsonload['input']
-    from_lang = data_jsonload['from']
-    to_lang = data_jsonload['to']
+    from_lang = data_jsonload['from'].lower()
+    to_lang = data_jsonload['to'].lower()
 
     print(data)
     print(f'Input: {input_data}')
