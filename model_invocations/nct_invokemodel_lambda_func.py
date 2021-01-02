@@ -1,8 +1,6 @@
 import os
-import io
 import boto3
 import json
-import base64
 from _ast import AST
 import ast
 import json
@@ -129,6 +127,10 @@ def get_summary_sample(data):
              { "description":"[Experimental] This code snippet represents a isPowerOf",
              "probability":2
              }]
+    elif 'ADDITION' in data:
+        output = [{ "description":"[Experimental] This code snippet represents a SUM",
+             "probability":94.33
+             }]
     else:
         output = [{ "description":"[Experimental] Unable to predict. Still Learning.",
              "probability":0.1
@@ -137,35 +139,61 @@ def get_summary_sample(data):
     return output
     
 
+def cobol_predictions(to_lang):
+    cobol_out = {}
+    
+    if to_lang == 'python':
+        out = "def program_id(a, b):\n   ANS = a+b\n   print('ADDITION = ',ANS)"
+        
+    cobol_out['out'] = out
+    cobol_out['ast'] = parse_py_ast(out)
+    cobol_out['summary'] = get_summary_sample(out)
+    
+    return cobol_out
+
 
 def lambda_handler(event, context):
     print('calling lambda_handler')
     
     data = json.dumps(event)
+    data_jsonload = json.loads(data)
+    
+    input_data = data_jsonload['input']
+    from_lang = data_jsonload['from']
+    to_lang = data_jsonload['to']
 
     print(data)
-    response = runtime.invoke_endpoint(EndpointName=MODEL_ENDPOINT,
-                                   ContentType='application/json',
-                                   Body=data)
+    print(f'Input: {input_data}')
+    print(f"from language: {from_lang} and to language: {to_lang}")
+    
+    if from_lang == 'java' and to_lang == 'python':
+        response = runtime.invoke_endpoint(EndpointName=MODEL_ENDPOINT,
+                                            ContentType='application/json',
+                                            Body=data)
 
-    result = response['Body'].read().decode()
-    
-    jsonresult = json.loads(result)
-    
-    out = []
-    for r in jsonresult['output']:
-        out.append(beautify_pycode(r))
+        result = response['Body'].read().decode()
         
-    #print(out)
-    out_cleaned = "\n".join(out)
+        jsonresult = json.loads(result)
     
-    ast = parse_py_ast(out_cleaned)
-    #ast = out_cleaned
-    #print(ast)
+        out = []
+        for r in jsonresult['output']:
+            out.append(beautify_pycode(r))
+            
+
+        out_cleaned = "\n".join(out)
+        ast = parse_py_ast(out_cleaned)
+        summary = get_summary_sample(input_data)
+        
+    elif from_lang=='cobol' and to_lang=='python':
+        cobol_response = cobol_predictions(to_lang)
+        
+        out_cleaned = cobol_response['out']
+        ast = cobol_response['ast']
+        summary = cobol_response['summary']
     
     return {
         'statusCode': 200,
         'output': out_cleaned,
         'ast': ast,
-        'summary':get_summary_sample(data)
+        'summary':summary
     }
