@@ -1,57 +1,81 @@
 <div style="height: 47px;">
     <span class="h4" style="color: #103f7c; line-height: 47px;">Output ({{language}})</span>
+    
     <button mat-icon-button [disabled]="!hasCode()" color="primary" #tooltip="matTooltip" matTooltip="Download code"
         matTooltipHideDelay="100" style="float: right;" (click)="downloadCode()">
         <mat-icon>get_app</mat-icon>
     </button>
+    
     <button mat-icon-button [disabled]="!hasCode()" color="primary" style="color: #255899;" #tooltip="matTooltip"
         matTooltip="Copy code" matTooltipHideDelay="100" style="float: right;" [cdkCopyToClipboard]="code">
         <mat-icon>content_copy</mat-icon>
     </button>
+    
     <button mat-icon-button [disabled]="!showAST()" color="primary" style="color: #255899;" #tooltip="matTooltip"
         matTooltip="Edit AST" matTooltipHideDelay="100" style="float: right;">
         <mat-icon>edit</mat-icon>
     </button>
+    
+    <button mat-icon-button [disabled]="!showAST()" color="primary" style="color: #255899;" #tooltip="matTooltip"
+        matTooltip="View AST" matTooltipHideDelay="100" style="float: right;" (click)="opeAstDialogue()">
+        <mat-icon>zoom_in</mat-icon>
+    </button>
+
     <span style="margin-left: 20px;">
         <mat-slide-toggle class="example-margin" color="primary" [(ngModel)]="analyticsChecked" (ngModelChange)="analyticsCheckChanged($event)"
             style="font-weight: 500;font-size: .875rem;color: #103f7c;">Analytics</mat-slide-toggle>
     </span>
 </div>
 <div style="border: 1px solid #ced4da; border-radius: .25rem;min-height: 590px;">
-    <nav mat-tab-nav-bar>
-        <a mat-tab-link *ngFor="let tab of tabs" (click)="changeActiveTab(tab.id)" [active]="activeTab === tab.id" [disabled]="disableOptions(tab.id)">
-            {{tab.name}} </a>
-    </nav>
-    <div>
-        <div *ngIf="showCode()">
-            <pre><code [highlight]="code" [lineNumbers]="true" [languages]="highlightCode"></code></pre>
+    <div id="parentOutput" style="display: flex;">
+        <div class="form-group"
+            style="width: 250px;overflow: auto;overflow-x: visible; min-height: 590px;border-right: 1px solid #ced4da;margin-bottom: 0px;"
+            *ngIf="isFileMode() && rootNode && rootNode.name">
+            <nct-tree [rootNode]="rootNode" expanded="true" (nodeSelected)="treeNodeSelected($event)"></nct-tree>
         </div>
-        <div style="overflow:hidden;width: 100%;" [ngStyle]="{ 'display' : showAST() ? 'block' : 'none' }">
-            <div id="ast-container" ></div>
-        </div>
-        <div *ngIf="showGS()" style="padding: 10px;font-weight: 500;font-size: .875rem;">
-            <div class="alert" [ngClass]="getSummaryClass()">
-                <div style="width: 100%; display: flex; align-items: center; justify-content: center;" *ngIf="!summary || summary.lenght == 0">
-                    <mat-icon>sentiment_very_dissatisfied</mat-icon>
-                    <span style="display: block;">No prediction available !</span>
+        <div style="flex: 1;">
+            <nav mat-tab-nav-bar>
+                <a mat-tab-link *ngFor="let tab of tabs" (click)="changeActiveTab(tab.id)" [active]="activeTab === tab.id"
+                    [disabled]="disableOptions(tab.id)">
+                    {{tab.name}} </a>
+            </nav>
+            <div>
+                <div *ngIf="showCode()">
+                    <pre><code [highlight]="code" [lineNumbers]="true" [languages]="highlightCode"></code></pre>
                 </div>
-                <table style="border-collapse: collapse;width: 100%;" *ngIf="summary && summary.length > 0">
-                    <tr>
-                        <td style="border-right-width: 2px;border-right-style: solid;text-align: center;padding-right: 5px;"><small>Probability</small><h4>{{summaryProbability}} %</h4></td>
-                        <td style="padding-left: 5px;">
-                            <table style="border-collapse: collapse;width: 100%;">
-                                <tr *ngFor="let s of summary">
-                                    <td style="text-align: right;">{{s.probability}} %</td>
-                                    <td> -> {{s.description}}</td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
+                <div style="overflow:hidden;height: 535px;width: 100%;" [ngStyle]="{ 'display' : showAST() ? 'block' : 'none' }">
+                    <div id="ast-container"></div>
+                </div>
+                <div *ngIf="showGS()" style="padding: 10px;font-weight: 500;font-size: .875rem;">
+                    <div class="alert" [ngClass]="getSummaryClass()">
+                        <div style="width: 100%; display: flex; align-items: center; justify-content: center;"
+                            *ngIf="!summary || summary.lenght == 0">
+                            <mat-icon>sentiment_very_dissatisfied</mat-icon>
+                            <span style="display: block;">No prediction available !</span>
+                        </div>
+                        <table style="border-collapse: collapse;width: 100%;" *ngIf="summary && summary.length > 0">
+                            <tr>
+                                <td
+                                    style="border-right-width: 2px;border-right-style: solid;text-align: center;padding-right: 5px;">
+                                    <small>Probability</small>
+                                    <h4>{{summaryProbability}} %</h4>
+                                </td>
+                                <td style="padding-left: 5px;">
+                                    <table style="border-collapse: collapse;width: 100%;">
+                                        <tr *ngFor="let s of summary">
+                                            <td style="text-align: right;">{{s.probability}} %</td>
+                                            <td> -> {{s.description}}</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div style="position: absolute;left: 47%;top: 47%;" *ngIf="showProgressSpinner()">
+                    <mat-spinner style="margin: auto;"></mat-spinner>
+                </div>
             </div>
-        </div>
-        <div style="position: absolute;left: 47%;top: 47%;" *ngIf="showProgressSpinner()">
-            <mat-spinner style="margin: auto;"></mat-spinner>
         </div>
     </div>
 </div>

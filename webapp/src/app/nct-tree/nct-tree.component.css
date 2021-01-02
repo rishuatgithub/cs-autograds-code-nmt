@@ -1,0 +1,31 @@
+.parent {
+    font-weight: 450;
+    font-size: 14px;
+    min-height: 40px;
+    overflow: visible;
+}
+
+.node-name {
+    cursor: pointer;
+    line-height: 40px;
+    display: inline-block;
+}
+
+.child-nodes {
+    margin-left: 15px
+}
+
+.node-parent {
+    color: #103F7C;
+    -webkit-transition: color ease-in-out .15s, -webkit-box-shadow ease-in-out .25s;
+    -o-transition: color ease-in-out .15s, box-shadow ease-in-out .25s;
+    transition: color ease-in-out .15s, box-shadow ease-in-out .25s;
+}
+
+.node-parent:hover {
+    color: #0f7737;
+}
+
+.active {
+    color: #0f7737;
+}

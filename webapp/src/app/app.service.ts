@@ -7,7 +7,10 @@ export class AppService {
     inputLanguageChangeEvent: EventEmitter<ILanguage> = new EventEmitter();
     outputLanguageChangeEvent: EventEmitter<ILanguage> = new EventEmitter();
     codeGenerateRequestEvent: EventEmitter<IGenerateRequest> = new EventEmitter();
-    astDisplayRequestEvent: EventEmitter<string> = new EventEmitter();
+    clearInputEvent: EventEmitter<void> = new EventEmitter();
+    gitFetchEvent: EventEmitter<void> = new EventEmitter();
+    filesTranslatedEvent: EventEmitter<void> = new EventEmitter();
+    incorrectInputEvent: EventEmitter<string> = new EventEmitter();
 
     generateCode(request: IGenerateRequest): void {
         this.codeGenerateRequestEvent.emit(request);
@@ -21,7 +24,19 @@ export class AppService {
         this.outputLanguageChangeEvent.emit(lang);
     }
 
-    displayAst(astContent: string): void {
-        this.astDisplayRequestEvent.emit(astContent);
+    clearInput(): void {
+        this.clearInputEvent.emit();
+    }
+
+    gitFetchRequested(): void {
+        this.gitFetchEvent.emit();
+    }
+
+    filesTranslated(): void {
+        this.filesTranslatedEvent.emit();
+    }
+
+    incorrectInputDetected(message: string): void {
+        this.incorrectInputEvent.emit(message);
     }
 }

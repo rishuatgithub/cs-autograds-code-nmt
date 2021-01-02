@@ -61,7 +61,7 @@ button:focus {
 }
 
 .hljs {
-  padding-top: 0;
+  padding: 0px;
   background: #ffffff;
 }
 

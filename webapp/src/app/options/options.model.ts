@@ -2,78 +2,82 @@ export interface ILanguage {
     name: string,
     icon?: string,
     enabled: boolean,
+    extension: string,
     highlightCode?: string
 }
 
-//VB, COBOL, SQL, C++ JAVA, PYTHON
 export const INPUT_LANGUAGES: ILanguage[] = [
     { 
         name: 'Java', 
-        icon: '../assets/java-brands.svg',
+        icon: '../assets/java-brand.png',
         enabled: true,
-        highlightCode: 'java'
-    },
-    {
-        name: 'C++',
-        icon: '../assets/cpp-brands.svg',
-        enabled: false,
-        highlightCode: 'cpp'
-    },
-    { 
-        name: 'VB .Net',
-        icon: '../assets/vb-brands.svg',
-        enabled: false,
-        highlightCode: 'vb'
-    },
-    {
-        name: 'PERL',
-        icon: '../assets/perl-brands.svg',
-        enabled: false,
-        highlightCode: 'perl'
-    },
-    {
-        name: 'C#',
-        icon: '../assets/csharp-brands.svg',
-        enabled: false,
-        highlightCode: 'csharp'
+        highlightCode: 'java',
+        extension: 'java'
     },
     {
         name: 'COBOL',
-        icon: '../assets/cobol-brands.svg',
+        icon: '../assets/cobol-brand.png',
+        enabled: true,
+        highlightCode: 'cpp',
+        extension: 'cpp'
+    },
+    {
+        name: 'C++',
+        icon: '../assets/cpp-brand.png',
+        enabled: true,
+        highlightCode: 'cpp',
+        extension: 'cpp'
+    },
+    { 
+        name: 'VB .Net',
+        icon: '../assets/vb-net-brand.png',
         enabled: false,
-        highlightCode: 'cobol'
+        highlightCode: 'vbnet',
+        extension: 'vb'
+    },
+    {
+        name: 'PERL',
+        icon: '../assets/perl-brand.png',
+        enabled: false,
+        highlightCode: 'perl',
+        extension: 'perl'
+    },
+    {
+        name: 'C#',
+        icon: '../assets/csharp-brand.png',
+        enabled: false,
+        highlightCode: 'csharp',
+        extension: 'cs'
     }
 ];
 
 export const OUTPUT_LANGUAGES: ILanguage[] = [
     { 
         name: 'Python', 
-        icon: '../assets/python-brands.svg',
+        icon: '../assets/python-brand.png',
         enabled: true,
-        highlightCode: 'python'
+        highlightCode: 'python',
+        extension: 'py'
     },
     { 
         name: 'C#', 
-        icon: '../assets/csharp-brands.svg',
+        icon: '../assets/csharp-brand.png',
         enabled: false,
-        highlightCode: 'csharp'
+        highlightCode: 'csharp',
+        extension: 'cs'
     },
     {
         name: 'Java',
-        icon: '../assets/java-brands.svg',
+        icon: '../assets/java-brand.png',
         enabled: false,
-        highlightCode: 'java'
-    },
-    {
-        name: 'Kotlin',
-        icon: '../assets/kotlin-brands.svg',
-        enabled: false,
-        highlightCode: 'kotlin'
+        highlightCode: 'java',
+        extension: 'java'
     },
     {
         name: 'C++',
-        icon: '../assets/cpp-brands.svg',
+        icon: '../assets/cpp-brand.png',
         enabled: false,
-        highlightCode: 'cpp'
+        highlightCode: 'cpp',
+        extension: 'cpp'
     }
 ];

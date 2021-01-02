@@ -1,0 +1,14 @@
+<div style="display: table;color: #103f7c;">
+    <img src="../../assets/git-hub-icon.png" style="height: 30px;width: 30px;">
+    <span class="h5" style="display: table-cell;vertical-align: middle;padding-left:10px;">Git Clone</span>
+</div>
+<hr />
+<div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="git-clone-addon">Git Repo URL</span>
+        </div>
+        <input type="text" style="min-width: 350px;font-size: 1rem;" class="form-control" id="git-repo" aria-describedby="git-clone-addon" cdkFocusInitial>
+    </div>
+</div>
+<button mat-raised-button color="primary" style="float: right;" type="button" [mat-dialog-close]="true">Clone</button>

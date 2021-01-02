@@ -29,11 +29,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToolbarComponent } from "./toolbar/toolbar.component";
 import { OptionsComponent } from "./options/options.component";
 import { AppService } from "./app.service";
-import { InputCodeComponent } from "./input/input-code.component";
-import { OutputCodeComponent } from "./output/output-code.component";
+import { InputCodeComponent, GitCloneDialog } from "./input/input-code.component";
+import { OutputCodeComponent, AstOutputDialog } from "./output/output-code.component";
 import { AboutComponent } from "./about/about.component";
 import { StatusComponent } from "./status/status.component";
 import { HttpService } from './http';
+import { NCTTreeComponent } from "./nct-tree/nct-tree.component";
 
 @NgModule({
   declarations: [
@@ -43,7 +44,10 @@ import { HttpService } from './http';
     InputCodeComponent,
     OutputCodeComponent,
     AboutComponent,
-    StatusComponent
+    StatusComponent,
+    NCTTreeComponent,
+    GitCloneDialog,
+    AstOutputDialog
   ],
   imports: [
     BrowserModule,
@@ -76,10 +80,14 @@ import { HttpService } from './http';
       provide: HIGHLIGHT_OPTIONS,
       useValue: {
         coreLibraryLoader: () => import('highlight.js/lib/core'),
-        lineNumbersLoader: () => import('highlightjs-line-numbers.js'), // Optional, only if you want the line numbers
+        lineNumbersLoader: () => import('highlightjs-line-numbers.js'), // for line numbers
         languages: {
           python: () => import('highlight.js/lib/languages/python'),
-          java: () => import('highlight.js/lib/languages/java')
+          java: () => import('highlight.js/lib/languages/java'),
+          perl: () => import('highlight.js/lib/languages/perl'),
+          cpp: () => import('highlight.js/lib/languages/cpp'),
+          csharp: () => import('highlight.js/lib/languages/csharp'),
+          vbnet: () => import('highlight.js/lib/languages/vbnet')
         }
       }
     }

@@ -1,6 +1,11 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, Inject } from "@angular/core";
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+import { TEXT_MODE, FILE_MODE } from "../app.contant";
 
 import "../../assets/vtree.min.js";
+import { ITreeNode } from "../nct-tree/nct-tree.model";
+import { AppService } from "../app.service";
 declare var vtree: any;
 
 export interface ITab {
@@ -13,13 +18,16 @@ export interface ITab {
     templateUrl: './output-code.component.html'
 })
 export class OutputCodeComponent implements OnInit {
+    @Input() mode: string = TEXT_MODE;
     @Input() language: string = '';
+    @Input() extension: string = '';
     @Input() highlightCode: string[] = [];
     @Input() code: string = '';
     @Input() ast: any = {};
     @Input() summary: any[] = [];
     @Input() summaryProbability: number = 0;
     @Input() converting: boolean = false;
+    @Input() rootNode:ITreeNode = {};
 
     vt:any;
     tabs:ITab[] = [
@@ -29,21 +37,46 @@ export class OutputCodeComponent implements OnInit {
     ];
     activeTab: string = this.tabs[0].id;
     analyticsChecked:boolean = true;
+    fileName: string = '';
 
-    hasCode(): boolean {
-        if (this.code && this.code.trim() != '') {
-            return true;
-        }
-        return false;
+    constructor(private appSvc: AppService, public dialog: MatDialog) {
     }
 
     ngOnInit() {
-        this.vt = vtree(document.getElementById('ast-container'));
+        this.vt = vtree(document.getElementById('ast-container'), 545, 900);
         this.vt.mode(this.vt.MODE_PYTHON_AST)
             .data({})
             .conf('showArrayNode', false)
             .conf('showLinkName', false)
             .update();
+
+        this.appSvc.filesTranslatedEvent.subscribe(() => {
+            if (this.rootNode && this.rootNode.childs && this.rootNode.childs.length > 0) {
+                this.rootNode.childs[0].active = true;
+                (async () => {
+                    await this.delay(1);
+                    this.treeNodeSelected(this.rootNode.childs[0]);
+                })();
+            }
+        });
+        this.appSvc.clearInputEvent.subscribe(() => {
+            this.code = '';
+        });
+    }
+
+    hasCode(): boolean {
+        if (this.code && !(this.code.trim() === '')) {
+            return true;
+        }
+        return false;
+    } 
+    
+    isTextMode(): boolean {
+        return this.mode === TEXT_MODE;
+    }
+
+    isFileMode(): boolean {
+        return this.mode === FILE_MODE;
     }
 
     isActive(code: string) {
@@ -115,13 +148,21 @@ export class OutputCodeComponent implements OnInit {
     updateAST(): void {
         let data = JSON.parse(JSON.stringify(this.ast));
         if (!this.vt) {
-            this.vt = vtree(document.getElementById('ast-container'));
+            this.vt = vtree(document.getElementById('ast-container'), 545, 900);
             this.vt.mode(this.vt.MODE_PYTHON_AST)
                 .data(data)
                 .conf('showArrayNode', false)
                 .conf('showLinkName', false)
                 .update();
         } else {
+            if(this.mode === FILE_MODE && this.vt.width > 658) {
+                this.vt = vtree(document.getElementById('ast-container'), 545, 658);
+                this.vt.mode(this.vt.MODE_PYTHON_AST)
+                    .data(data)
+                    .conf('showArrayNode', false)
+                    .conf('showLinkName', false)
+                    .update();
+            }
             (async () => {
                 await this.delay(1);
                 this.vt.data(data).update();
@@ -135,7 +176,7 @@ export class OutputCodeComponent implements OnInit {
 
     downloadCode(): void {
         const blob: Blob = new Blob([this.code], { type: 'text' });
-        const fileName = 'output.py';
+        const fileName = (this.isFileMode() && this.fileName) ? this.fileName : ('output' + (this.extension ? '.' + this.extension : ''));
         const objectUrl: string = URL.createObjectURL(blob);
         const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
 
@@ -146,5 +187,46 @@ export class OutputCodeComponent implements OnInit {
 
         document.body.removeChild(a);
         URL.revokeObjectURL(objectUrl);
+    }
+
+    treeNodeSelected($event: ITreeNode): void {
+        if ($event.data) {
+            this.code = $event.data.code;
+            this.ast = $event.data.ast;
+            this.summary = $event.data.summary;
+            this.summaryProbability = $event.data.summaryProbability;
+            this.fileName = $event.name;
+            if (this.isActive('ast')) {
+                this.updateAST();
+            }
+        }
+    }
+
+    opeAstDialogue(): void {
+        this.dialog.open(AstOutputDialog, {
+            data: this.ast
+        });
+    }
+}
+
+@Component({
+    selector: 'ast-output',
+    templateUrl: './ast-output.html',
+    styles: [`
+        
+    `]
+})
+export class AstOutputDialog implements OnInit { 
+    vt: any;
+
+    constructor(@Inject(MAT_DIALOG_DATA) public data: any) { }
+
+    ngOnInit() {
+        this.vt = vtree(document.getElementById('ast-output-container'), 700, 1050);
+        this.vt.mode(this.vt.MODE_PYTHON_AST)
+            .data(this.data)
+            .conf('showArrayNode', false)
+            .conf('showLinkName', false)
+            .update();
     }
 }

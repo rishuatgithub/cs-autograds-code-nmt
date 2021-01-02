@@ -6,12 +6,16 @@
     <div class="row">
       <div class="col-lg-6">
         <input-code [code]="inputCode" [language]="inputLanguage?.name" [highlightCode]="highlightIntputCode"
-          [editCode]="editInput" [converting]="converting" (editCodeChanged)="inputCodeEditChange()" (codeChange)="inputCodeChange($event)">
+          [editCode]="editInput" [converting]="converting" (modeChanged)="inputModeChanged($event)"
+          (inputFileNodeChanged)="inputFileNodeChanged($event)" (editCodeChanged)="inputCodeEditChange()"
+          (codeChange)="inputCodeChange($event)" [extension]="inputLanguage?.extension">
         </input-code>
       </div>
       <div class="col-lg-6">
         <output-code [code]="outputCode" [language]="outputLanguage?.name" [highlightCode]="highlightOutputCode"
-          [ast]="astData" [summary]="summary" [summaryProbability]="summaryProbability" [converting]="converting"></output-code>
+          [mode]="mode" [ast]="astData" [summary]="summary" [summaryProbability]="summaryProbability"
+          [converting]="converting" [rootNode]="outputFileNode" [extension]="outputLanguage?.extension">
+        </output-code>
       </div>
     </div>
   </mat-card>
