@@ -7,7 +7,7 @@
     </button>
     
     <button mat-icon-button [disabled]="!hasCode()" color="primary" style="color: #255899;" #tooltip="matTooltip"
-        matTooltip="Copy code" matTooltipHideDelay="100" style="float: right;" [cdkCopyToClipboard]="code">
+        matTooltip="Copy code" matTooltipHideDelay="100" style="float: right;" [cdkCopyToClipboard]="code" (click)="codeCopied()">
         <mat-icon>content_copy</mat-icon>
     </button>
     
@@ -23,7 +23,7 @@
 
     <span style="margin-left: 20px;">
         <mat-slide-toggle class="example-margin" color="primary" [(ngModel)]="analyticsChecked" (ngModelChange)="analyticsCheckChanged($event)"
-            style="font-weight: 500;font-size: .875rem;color: #103f7c;">Analytics</mat-slide-toggle>
+            style="font-weight: 500;font-size: .875rem;color: #103f7c;" [disabled]="analyticsNotAvailable()">Analytics</mat-slide-toggle>
     </span>
 </div>
 <div style="border: 1px solid #ced4da; border-radius: .25rem;min-height: 590px;">
@@ -42,6 +42,11 @@
             <div>
                 <div *ngIf="showCode()">
                     <pre><code [highlight]="code" [lineNumbers]="true" [languages]="highlightCode"></code></pre>
+                </div>
+                <div *ngIf="showMessage()" style="padding: 10px;font-weight: 500;font-size: .875rem;">
+                    <div class="alert alert-danger">
+                        Translation failed. Please try again !!
+                    </div>
                 </div>
                 <div style="overflow:hidden;height: 535px;width: 100%;" [ngStyle]="{ 'display' : showAST() ? 'block' : 'none' }">
                     <div id="ast-container"></div>

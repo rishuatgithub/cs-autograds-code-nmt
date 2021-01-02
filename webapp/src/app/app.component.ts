@@ -61,6 +61,9 @@ export class AppComponent implements OnInit {
     this.appSvc.incorrectInputEvent.subscribe((message: string) => {
       this.openSnackBar(message, 3000);
     });
+    this.appSvc.codeCopiedEvent.subscribe(() => {
+      this.openSnackBar('Output code copied to clipboard !!', 1200);
+    });
   }
 
   convertInTextMode(request: IGenerateRequest): void {
@@ -120,7 +123,7 @@ export class AppComponent implements OnInit {
       let outputNode: ITreeNode = {
         name: node.name.replace(ext, this.outputLanguage.extension)
       };
-      this.httpScv.post(CONVERSION_URL, { input: node.data })
+      this.httpScv.post(CONVERSION_URL, { from: request.from, to: request.to, input: node.data })
         .subscribe((res: IHttpResponse) => {
           if (res.success) {
             outputNode.converted = true;
@@ -151,7 +154,7 @@ export class AppComponent implements OnInit {
   convertCodeInTextMode(request: IGenerateRequest): void {
     this.outputCode = '';
     this.converting = true;
-    this.httpScv.post(CONVERSION_URL, { input: this.inputCode })
+    this.httpScv.post(CONVERSION_URL, { from: request.from, to: request.to, input: this.inputCode })
       .subscribe((res: IHttpResponse) => {
         console.log(res);
         if (res.success) {

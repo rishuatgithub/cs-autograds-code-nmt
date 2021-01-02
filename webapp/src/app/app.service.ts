@@ -11,6 +11,7 @@ export class AppService {
     gitFetchEvent: EventEmitter<void> = new EventEmitter();
     filesTranslatedEvent: EventEmitter<void> = new EventEmitter();
     incorrectInputEvent: EventEmitter<string> = new EventEmitter();
+    codeCopiedEvent: EventEmitter<void> = new EventEmitter();
 
     generateCode(request: IGenerateRequest): void {
         this.codeGenerateRequestEvent.emit(request);
@@ -38,5 +39,9 @@ export class AppService {
 
     incorrectInputDetected(message: string): void {
         this.incorrectInputEvent.emit(message);
+    }
+
+    codeCopied(): void {
+        this.codeCopiedEvent.emit();
     }
 }

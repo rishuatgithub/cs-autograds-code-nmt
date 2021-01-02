@@ -28,6 +28,7 @@ export class OutputCodeComponent implements OnInit {
     @Input() summaryProbability: number = 0;
     @Input() converting: boolean = false;
     @Input() rootNode:ITreeNode = {};
+    @Input() translated: boolean = true;
 
     vt:any;
     tabs:ITab[] = [
@@ -95,10 +96,22 @@ export class OutputCodeComponent implements OnInit {
         );
     }
 
+    analyticsNotAvailable(): boolean {
+        if ((!this.ast || !this.ast._PyType || !this.ast.body) && (!this.summary || this.summary.length == 0))
+            return true;
+        return false;
+    }
+
+    showMessage(): boolean {
+        return (!this.converting) &&
+            (this.hasCode() &&
+                this.isActive('code')) && !this.translated;
+    }
+
     showCode(): boolean {
         return (!this.converting) &&
             (this.hasCode() &&
-                this.isActive('code'));
+                this.isActive('code')) && this.translated;
     }
 
     showAST(): boolean {
@@ -196,6 +209,7 @@ export class OutputCodeComponent implements OnInit {
             this.summary = $event.data.summary;
             this.summaryProbability = $event.data.summaryProbability;
             this.fileName = $event.name;
+            this.translated  = $event.converted;
             if (this.isActive('ast')) {
                 this.updateAST();
             }
@@ -206,6 +220,10 @@ export class OutputCodeComponent implements OnInit {
         this.dialog.open(AstOutputDialog, {
             data: this.ast
         });
+    }
+
+    codeCopied(): void {
+        this.appSvc.codeCopied();
     }
 }
 
