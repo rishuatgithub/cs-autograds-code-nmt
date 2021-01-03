@@ -39,47 +39,46 @@
                     [disabled]="disableOptions(tab.id)">
                     {{tab.name}} </a>
             </nav>
-            <div>
-                <div *ngIf="showCode()" style="min-height: 34rem;overflow: auto;">
-                    <pre style="overflow: visible;"><code [highlight]="code" [lineNumbers]="true" [languages]="highlightCode"></code></pre>
+            <div *ngIf="showCode()" style="min-height: 34rem;overflow: auto;">
+                <pre style="overflow: visible;"><code [highlight]="code" [lineNumbers]="true" [languages]="highlightCode"></code></pre>
+            </div>
+            <div *ngIf="showMessage()" style="padding: 10px;font-weight: 500;font-size: .875rem;min-height: 34rem;">
+                <div class="alert alert-danger">
+                    Translation failed. Please try again !!
                 </div>
-                <div *ngIf="showMessage()" style="padding: 10px;font-weight: 500;font-size: .875rem;min-height: 34rem;">
-                    <div class="alert alert-danger">
-                        Translation failed. Please try again !!
+            </div>
+            <div style="overflow:hidden;min-height: 34rem;width: 100%;" [ngStyle]="{ 'display' : showAST() ? 'block' : 'none' }">
+                <div id="ast-container"></div>
+            </div>
+            <div *ngIf="showGS()" style="padding: 10px;font-weight: 500;font-size: .875rem;">
+                <div class="alert" [ngClass]="getSummaryClass()">
+                    <div style="width: 100%; display: flex; align-items: center; justify-content: center;"
+                        *ngIf="!summary || summary.lenght == 0">
+                        <mat-icon>sentiment_very_dissatisfied</mat-icon>
+                        <span style="display: block;">No prediction available !</span>
                     </div>
+                    <table style="border-collapse: collapse;width: 100%;" *ngIf="summary && summary.length > 0">
+                        <tr>
+                            <td style="border-right-width: 2px;border-right-style: solid;text-align: center;padding-right: 5px;">
+                                <small>Probability</small>
+                                <h4>{{summaryProbability}} %</h4>
+                            </td>
+                            <td style="padding-left: 5px;">
+                                <table style="border-collapse: collapse;width: 100%;">
+                                    <tr *ngFor="let s of summary">
+                                        <td style="text-align: right;">{{s.probability}} %</td>
+                                        <td> -> {{s.description}}</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
-                <div style="overflow:hidden;min-height: 34rem;width: 100%;" [ngStyle]="{ 'display' : showAST() ? 'block' : 'none' }">
-                    <div id="ast-container"></div>
-                </div>
-                <div *ngIf="showGS()" style="padding: 10px;font-weight: 500;font-size: .875rem;">
-                    <div class="alert" [ngClass]="getSummaryClass()">
-                        <div style="width: 100%; display: flex; align-items: center; justify-content: center;"
-                            *ngIf="!summary || summary.lenght == 0">
-                            <mat-icon>sentiment_very_dissatisfied</mat-icon>
-                            <span style="display: block;">No prediction available !</span>
-                        </div>
-                        <table style="border-collapse: collapse;width: 100%;" *ngIf="summary && summary.length > 0">
-                            <tr>
-                                <td
-                                    style="border-right-width: 2px;border-right-style: solid;text-align: center;padding-right: 5px;">
-                                    <small>Probability</small>
-                                    <h4>{{summaryProbability}} %</h4>
-                                </td>
-                                <td style="padding-left: 5px;">
-                                    <table style="border-collapse: collapse;width: 100%;">
-                                        <tr *ngFor="let s of summary">
-                                            <td style="text-align: right;">{{s.probability}} %</td>
-                                            <td> -> {{s.description}}</td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-                <div style="position: absolute;left: 47%;top: 47%;background-color: transparent;" *ngIf="showProgressSpinner()">
-                    <mat-spinner style="margin: auto;"></mat-spinner>
-                </div>
+            </div>
+            <!--  -->
+            <div style="position: relative;left: 0%;top: 47%;background-color: transparent;background: transparent;"
+                [ngClass]="{'text-mode': isTextMode(), 'file-mode' : isFileMode() }" *ngIf="showProgressSpinner()">
+                <mat-spinner style="margin: auto;"></mat-spinner>
             </div>
         </div>
     </div>

@@ -56,7 +56,7 @@ export class AppComponent implements OnInit {
       }
     });
     this.appSvc.gitFetchEvent.subscribe(() => {
-      this.openSnackBar('Git fetch feature is still in progress. Please use a different input method !!', 3000);
+      this.openSnackBar('Git clone feature is still in progress. Please use a different input method !!', 3000);
     });
     this.appSvc.incorrectInputEvent.subscribe((message: string) => {
       this.openSnackBar(message, 3000);

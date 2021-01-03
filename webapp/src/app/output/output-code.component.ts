@@ -15,7 +15,19 @@ export interface ITab {
 
 @Component({
     selector: 'output-code',
-    templateUrl: './output-code.component.html'
+    templateUrl: './output-code.component.html',
+    styles: [`
+        .text-mode {
+            top: 80%;
+            left: 0%;
+            position: relative;
+        }
+        .file-mode {
+            top: 47%;
+            left: 47%;
+            position: absolute;
+        }
+    `]
 })
 export class OutputCodeComponent implements OnInit {
     @Input() mode: string = TEXT_MODE;

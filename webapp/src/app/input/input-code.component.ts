@@ -148,7 +148,7 @@ export class InputCodeComponent {
     focusInputCode(): void {
         setTimeout(() => {
             this.inputCode.nativeElement.focus();
-        }, 1);
+        }, 2);
     }
 }
 
