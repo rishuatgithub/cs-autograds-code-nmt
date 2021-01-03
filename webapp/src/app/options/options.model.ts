@@ -19,7 +19,7 @@ export const INPUT_LANGUAGES: ILanguage[] = [
         icon: '../assets/cobol-brand.png',
         enabled: true,
         highlightCode: 'perl',
-        extension: 'cob'
+        extension: 'cbl'
     },
     {
         name: 'C++',
