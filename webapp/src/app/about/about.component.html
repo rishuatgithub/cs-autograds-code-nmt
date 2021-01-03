@@ -1,16 +1,33 @@
-<h2 mat-dialog-title>Neural Code Translator (NCT)</h2>
-<mat-dialog-content class="mat-typography">
-
-    <h3>Cognizant GIC Hackathon 2020</h3>
-    <p><strong>Team Name:</strong> CS-Autograds</p>
-    
-    <strong>Contributors:</strong>
-    <ul>
-        <li>Rishu Shrivastava</li>
-        <li>Harish Pandya</li>
-        <li>Prateek Panda</li>
-    </ul>
-</mat-dialog-content>
+<div style="color: #0b2444;margin-bottom: 10px;">
+    <h3>Neural Code Translator (NCT)</h3>
+    <div style="font-size: 0.87rem;">
+        [<strong>Cognizant GIC Hackathon 2020</strong>]
+    </div>
+    <hr />
+    <div style="font-size: 0.96rem;">
+        <p style="margin-bottom: 0.3rem;">
+            <strong>NCT</strong> is state of art code translator. It uses AI/ML techniques to
+        </p>
+        <p>
+            translate code between programing languages.
+        </p>
+    </div>    
+    <div style="height: 10px;"></div>
+    <p style="margin-top: 1rem;">
+        <span style="font-size: 1.1rem;font-weight: 550;">Developed by :</span>
+        <span style="font-size: 1rem;font-weight: 400;"> CS-Autograds</span>
+    </p>    
+    <div style="display: table;width: 100%;">
+        <div style="display: table-row;">
+            <div style="display: table-cell;text-align: center;" *ngFor="let c of contributors">
+                <img [src]="c.image" style="height: 60px;border-radius: 50%;margin: 0 auto;display: block;" />
+                <span style="margin: 0 auto;display: inline-block;font-weight: 550;font-size: 0.93rem;">{{c.name}}</span>
+                <br />
+                <span style="margin: 0 auto;display: inline-block;font-weight: 450;font-size: 0.8rem;">({{c.id}})</span>
+            </div>
+        </div>
+    </div>
+</div>
 <mat-dialog-actions align="end">
     <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Close</button>
 </mat-dialog-actions>

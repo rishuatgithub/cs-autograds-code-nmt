@@ -12,7 +12,7 @@
     </button>
     
     <button mat-icon-button [disabled]="!showAST()" color="primary" style="color: #255899;" #tooltip="matTooltip"
-        matTooltip="Edit AST" matTooltipHideDelay="100" style="float: right;">
+        matTooltip="Edit AST" matTooltipHideDelay="100" style="float: right;" (click)="opeAstDialogue()">
         <mat-icon>edit</mat-icon>
     </button>
     
@@ -26,29 +26,29 @@
             style="font-weight: 500;font-size: .875rem;color: #103f7c;" [disabled]="analyticsNotAvailable()">Analytics</mat-slide-toggle>
     </span>
 </div>
-<div style="border: 1px solid #ced4da; border-radius: .25rem;min-height: 590px;">
-    <div id="parentOutput" style="display: flex;">
-        <div class="form-group"
-            style="width: 250px;overflow: auto;overflow-x: visible; min-height: 590px;border-right: 1px solid #ced4da;margin-bottom: 0px;"
+<div style="border: 1px solid #ced4da; border-radius: .25rem;min-height: 37rem;">
+    <div class="row" style="margin-left: 0px;margin-right: 0px;">
+        <div class="col-lg-3 col-md-3 col-sm-3"
+            style="padding: 0; overflow: auto; min-height: 37rem;border-right: 1px solid #ced4da;margin-bottom: 0px;"
             *ngIf="isFileMode() && rootNode && rootNode.name">
             <nct-tree [rootNode]="rootNode" expanded="true" (nodeSelected)="treeNodeSelected($event)"></nct-tree>
         </div>
-        <div style="flex: 1;">
+        <div class="col-lg-9 col-md-9 col-sm-9" style="padding: 0;" [ngClass]="{'col-lg-12': isTextMode()}">
             <nav mat-tab-nav-bar>
                 <a mat-tab-link *ngFor="let tab of tabs" (click)="changeActiveTab(tab.id)" [active]="activeTab === tab.id"
                     [disabled]="disableOptions(tab.id)">
                     {{tab.name}} </a>
             </nav>
             <div>
-                <div *ngIf="showCode()">
-                    <pre><code [highlight]="code" [lineNumbers]="true" [languages]="highlightCode"></code></pre>
+                <div *ngIf="showCode()" style="min-height: 34rem;overflow: auto;">
+                    <pre style="overflow: visible;"><code [highlight]="code" [lineNumbers]="true" [languages]="highlightCode"></code></pre>
                 </div>
-                <div *ngIf="showMessage()" style="padding: 10px;font-weight: 500;font-size: .875rem;">
+                <div *ngIf="showMessage()" style="padding: 10px;font-weight: 500;font-size: .875rem;min-height: 34rem;">
                     <div class="alert alert-danger">
                         Translation failed. Please try again !!
                     </div>
                 </div>
-                <div style="overflow:hidden;height: 535px;width: 100%;" [ngStyle]="{ 'display' : showAST() ? 'block' : 'none' }">
+                <div style="overflow:hidden;min-height: 34rem;width: 100%;" [ngStyle]="{ 'display' : showAST() ? 'block' : 'none' }">
                     <div id="ast-container"></div>
                 </div>
                 <div *ngIf="showGS()" style="padding: 10px;font-weight: 500;font-size: .875rem;">
@@ -77,7 +77,7 @@
                         </table>
                     </div>
                 </div>
-                <div style="position: absolute;left: 47%;top: 47%;" *ngIf="showProgressSpinner()">
+                <div style="position: absolute;left: 47%;top: 47%;background-color: transparent;" *ngIf="showProgressSpinner()">
                     <mat-spinner style="margin: auto;"></mat-spinner>
                 </div>
             </div>

@@ -1,23 +1,24 @@
 <div style="height: 47px;">
     <span class="h4" style="color: #103f7c; line-height: 47px;">Input ({{language}})</span>
-    
+
     <input #inputFileElement type="file" [accept]="'.' + extension" (change)="onFileSelected($event)" hidden>
     <button mat-icon-button color="primary" #tooltip="matTooltip" matTooltip="Upload a file" matTooltipHideDelay="100"
         (click)="inputFileElement.value=''; inputFileElement.click();">
         <mat-icon>publish</mat-icon>
     </button>
-    
-    <input #inputDirectoryElement type="file" (change)="onFolderSelected($event)" directory mozdirectory allowdirs webkitdirectory multiple hidden />
-    <button mat-icon-button color="primary" #tooltip="matTooltip" matTooltip="Upload directory" matTooltipHideDelay="100"
-        (click)="inputDirectoryElement.value=''; inputDirectoryElement.click();">
+
+    <input #inputDirectoryElement type="file" (change)="onFolderSelected($event)" directory mozdirectory allowdirs
+        webkitdirectory multiple hidden />
+    <button mat-icon-button color="primary" #tooltip="matTooltip" matTooltip="Upload directory"
+        matTooltipHideDelay="100" (click)="inputDirectoryElement.value=''; inputDirectoryElement.click();">
         <mat-icon>create_new_folder</mat-icon>
     </button>
 
-    <button mat-icon-button color="primary" #tooltip="matTooltip" matTooltip="Upload from git" matTooltipHideDelay="100" 
+    <button mat-icon-button color="primary" #tooltip="matTooltip" matTooltip="Upload from git" matTooltipHideDelay="100"
         (click)="opeGitCloneDialogue()">
         <img src="../../assets/git-hub-icon.png" style="height: 21px;width: 21px;">
     </button>
-    
+
     <button mat-icon-button color="primary" #tooltip="matTooltip" matTooltip="Edit input" matTooltipHideDelay="100"
         (click)="enableCodeEdit()" [disabled]="!isTextMode() || editCode">
         <mat-icon>edit</mat-icon>
@@ -31,31 +32,32 @@
 <form>
     <div *ngIf="isTextMode()">
         <div class="form-group" style="margin-bottom: 0px;" *ngIf="editCode">
-            <textarea #inputCode name="inputCode" [(ngModel)]="code" (ngModelChange)="codeChanged($event)" class="form-control"
-                [readonly]="converting" style="background-color: #fff;font-family: monospace;min-height: 590px;"></textarea>
+            <textarea #inputCode name="inputCode" [(ngModel)]="code" (ngModelChange)="codeChanged($event)"
+                class="form-control" [readonly]="converting"
+                style="background-color: #fff;font-family: monospace;min-height: 37rem;"></textarea>
         </div>
-        <div style="border: 1px solid #ced4da; border-radius: .25rem;min-height: 590px;" *ngIf="!editCode">
-            <pre style="margin-top: 1px;"><code [highlight]="code" [lineNumbers]="true" [languages]="highlightCode"></code></pre>
+        <div style="border: 1px solid #ced4da; border-radius: .25rem;min-height: 37rem;overflow: auto;"
+            *ngIf="!editCode">
+            <pre style="margin-top: 1px;overflow: visible;"><code [highlight]="code" [lineNumbers]="true" [languages]="highlightCode"></code></pre>
         </div>
         <div style="position: absolute;left: 47%;top: 47%;" *ngIf="converting">
             <mat-spinner style="margin: auto;">Converting ...</mat-spinner>
         </div>
     </div>
     <div *ngIf="isFileMode()">
-        <div id="parentInput" style="display: flex;">
-            <div class="form-group"
-                style="width: 250px;overflow: auto;overflow-x: visible; min-height: 590px;border: 1px solid #ced4da; border-radius: .25rem;border-top-right-radius: 0px;border-bottom-right-radius: 0px;margin-bottom: 0px;"
+        <div class="row" style="margin-left: 0px;margin-right: 0px;">
+            <div class="col-lg-3 col-md-3 col-sm-3" style="padding: 0; overflow: auto; min-height: 37rem;border: 1px solid #ced4da; border-radius: .25rem;border-top-right-radius: 0px;border-bottom-right-radius: 0px;margin-bottom: 0px;"
                 *ngIf="isFileMode() && rootNode && rootNode.name">
                 <nct-tree [rootNode]="rootNode" expanded="true" (nodeSelected)="treeNodeSelected($event)"></nct-tree>
             </div>
-            <div style="flex: 1;">
-                <div style="border: 1px solid #ced4da;border-left-width: 0px; border-radius: .25rem;min-height: 590px;border-top-left-radius: 0px;border-bottom-left-radius: 0px;">
-                    <div style="width: 100%;border-bottom: 1px solid #ced4da;padding: 10px" *ngIf="fileName">
-                        <h6 style="margin-bottom: 0px;color: #103f7c;">File Name : <span style="color: #041f42b2;">{{fileName}}</span></h6>
-                    </div>
-                    <pre><code [highlight]="code" [lineNumbers]="true" [languages]="highlightCode"></code></pre>
+            <div class="col-lg-9 col-md-9 col-sm-9" style="padding: 0;min-height: 37rem;border: 1px solid #ced4da;border-left-width: 0px; border-radius: .25rem;border-top-left-radius: 0px;border-bottom-left-radius: 0px;">
+                <div style="width: 100%;min-height: 2rem;border-bottom: 1px solid #ced4da;padding: 10px;" *ngIf="fileName">
+                    <h6 style="margin-bottom: 0px;color: #103f7c;">File Name : <span style="color: #06182e;">{{fileName}}</span></h6>
                 </div>
-                <div style="position: absolute;left: 47%;top: 47%;" *ngIf="converting">
+                <div style="overflow: auto;min-height: 34.5rem;">
+                    <pre style="overflow: visible;"><code [highlight]="code" [lineNumbers]="true" [languages]="highlightCode"></code></pre>
+                </div>
+                <div style="position: absolute;left: 47%;top: 47%;background-color: transparent;" *ngIf="converting">
                     <mat-spinner style="margin: auto;">Converting ...</mat-spinner>
                 </div>
             </div>

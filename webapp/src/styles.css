@@ -63,6 +63,7 @@ button:focus {
 .hljs {
   padding: 0px;
   background: #ffffff;
+  overflow-x: visible;
 }
 
 /* for block of numbers */
@@ -271,6 +272,26 @@ svg path.vtree-table {
 
   .swap-button {
     left: 48.25%;
+  }
+}
+
+@media (min-width: 1400px) {
+  .option-card {
+    width: 50%;
+  }
+
+  .swap-button {
+    left: 48.5%;
+  }
+}
+
+@media (min-width: 1500px) {
+  .option-card {
+    width: 50%;
+  }
+
+  .swap-button {
+    left: 48.65%;
   }
 }
 

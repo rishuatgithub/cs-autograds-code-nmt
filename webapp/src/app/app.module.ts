@@ -31,7 +31,7 @@ import { OptionsComponent } from "./options/options.component";
 import { AppService } from "./app.service";
 import { InputCodeComponent, GitCloneDialog } from "./input/input-code.component";
 import { OutputCodeComponent, AstOutputDialog } from "./output/output-code.component";
-import { AboutComponent } from "./about/about.component";
+import { AboutComponent, InferenceArchComponent, HelpComponent } from "./about/about.component";
 import { StatusComponent } from "./status/status.component";
 import { HttpService } from './http';
 import { NCTTreeComponent } from "./nct-tree/nct-tree.component";
@@ -47,7 +47,9 @@ import { NCTTreeComponent } from "./nct-tree/nct-tree.component";
     StatusComponent,
     NCTTreeComponent,
     GitCloneDialog,
-    AstOutputDialog
+    AstOutputDialog,
+    InferenceArchComponent,
+    HelpComponent
   ],
   imports: [
     BrowserModule,

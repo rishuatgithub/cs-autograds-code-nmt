@@ -168,8 +168,8 @@ export class OutputCodeComponent implements OnInit {
                 .conf('showLinkName', false)
                 .update();
         } else {
-            if(this.mode === FILE_MODE && this.vt.width > 658) {
-                this.vt = vtree(document.getElementById('ast-container'), 545, 658);
+            if(this.mode === FILE_MODE && this.vt.width > 700) {
+                this.vt = vtree(document.getElementById('ast-container'), 545, 700);
                 this.vt.mode(this.vt.MODE_PYTHON_AST)
                     .data(data)
                     .conf('showArrayNode', false)

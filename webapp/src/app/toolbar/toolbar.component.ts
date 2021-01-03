@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { MatDialog } from '@angular/material/dialog';
-import { AboutComponent } from "../about/about.component";
+import { AboutComponent, HelpComponent, InferenceArchComponent } from "../about/about.component";
 
 @Component({
     selector: 'toolbar',
@@ -12,5 +12,13 @@ export class ToolbarComponent {
 
     openAbout(): void {
         this.dialog.open(AboutComponent);
+    }
+
+    openHelp(): void {
+        this.dialog.open(HelpComponent);
+    }
+
+    openInferenceArchitecture(): void {
+        this.dialog.open(InferenceArchComponent);
     }
 }

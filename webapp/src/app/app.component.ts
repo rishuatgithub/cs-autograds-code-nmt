@@ -179,9 +179,11 @@ export class AppComponent implements OnInit {
   getMaxSummaryProbability(summary: any[]): any {
     let summaryProbability = 0.0;
 
-    for (let i = 0; i < summary.length; i++) {
-      if (summary[i].probability > summaryProbability) {
-        summaryProbability = summary[i].probability;
+    if (summary && summary.length > 0) {
+      for (let i = 0; i < summary.length; i++) {
+        if (summary[i].probability > summaryProbability) {
+          summaryProbability = summary[i].probability;
+        }
       }
     }
 

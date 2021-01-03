@@ -6,6 +6,9 @@
         <span style="font-weight: 390;font-size: .780rem;position: absolute;top: 3px; left: 56px;">CS-Autograds</span>
         <h2 style="position: absolute;top: 22px; left: 56px;">Neural Code Translator</h2>
         <span style="flex: 1 1 auto;"></span>
+        <button mat-icon-button #tooltip="matTooltip" matTooltip="Inference Architecture" matTooltipHideDelay="100" (click)="openInferenceArchitecture()">
+            <mat-icon>engineering</mat-icon>
+        </button>
         <button mat-icon-button #tooltip="matTooltip" matTooltip="Help" matTooltipHideDelay="100" (click)="openAbout()">
             <mat-icon>help_outline</mat-icon>
         </button>
